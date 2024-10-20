@@ -1,0 +1,117 @@
+.select{
+    display: flex;
+}
+
+.detail-holder {
+    display: flex;
+    align-items: center; 
+    justify-content: space-between; 
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+.today-date {
+    text-align: left;
+    font-size: 2em;
+}
+
+.select p {
+    display: inline; 
+    margin-right: 5px;
+    font-family: Arial, sans-serif; 
+}
+
+.form-select {
+    font-family: Arial, sans-serif;
+    font-size: 1em;
+}
+
+
+
+
+.form-select{
+    padding: 8px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+
+#reservationTable {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+
+#reservationTable th {
+    background-color: #f2f2f2;
+    color: #333;
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+
+#reservationTable td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+}
+
+#reservationTable tr:last-child td {
+    border-bottom: none; 
+}
+
+
+#reservationTable tr td:last-child {
+    border-right: none;
+}
+
+
+.event {
+    border-radius: 8px;
+    padding: 5px;
+    color: #fff;
+    text-align: center;
+}
+
+
+.event-meeting-a {
+    background-color: #FFCCCC;
+}
+
+.event-meeting-b {
+    background-color: #CCFFCC;
+}
+
+.event-conference {
+    background-color: #CCCCFF;
+}
+
+.event-external {
+    background-color: var(--externalMain);
+    color: #000;
+}
+
+.event-internal {
+    background-color: var(--internalMain);
+    color: #000;
+}
+
+.event-maintenance {
+    background-color: var(--maintananceMain);
+    color: #000;
+}
+
+.event-zoom {
+    background-color: var(--zoomMain);
+    color: #000;
+}
+
+.event-review {
+    background-color: #FF6347;
+}
