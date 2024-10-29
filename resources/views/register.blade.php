@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="shortcut icon" href="{{ asset('img/favicon.png') }}">
-    <title>{{ $title }}</title>
+    <title>Register</title>
 </head>
 <body>
 <div class="elements">
@@ -14,10 +14,10 @@
         @include('partials.navbar')
     </div>
     <div class="body-replace">
-        <div class="login-container">
-            <form action="{{ route('login') }}" method="POST">
+        <div class="register-container">
+            <form action="{{ route('register') }}" method="POST">
                 @csrf
-                <h1>Login</h1>
+                <h1>Register</h1>
                 @if ($errors->any())
                     <div class="alert alert-danger">
                         <ul>
@@ -28,6 +28,10 @@
                     </div>
                 @endif
                 <div class="form-row">
+                    <input type="text" name="name" id="nameInput" class="form-input" placeholder="Your Name">
+                    <label for="nameInput" class="form-label">Name</label>
+                </div>
+                <div class="form-row">
                     <input type="email" name="email" id="emailInput" class="form-input" placeholder="example@email.com">
                     <label for="emailInput" class="form-label">Email</label>
                 </div>
@@ -35,11 +39,14 @@
                     <input type="password" name="password" id="passwordInput" class="form-input" placeholder="1234password">
                     <label for="passwordInput" class="form-label">Password</label>
                 </div>
-                <a href="#" class="forgotPwd">forgot password</a>
+                <div class="form-row">
+                    <input type="password" name="password_confirmation" id="passwordConfirmationInput" class="form-input" placeholder="Confirm Password">
+                    <label for="passwordConfirmationInput" class="form-label">Confirm Password</label>
+                </div>
 
-                <button type="submit" class="submitBtn">Login</button>
+                <button type="submit" class="submitBtn">Register</button>
             </form>
-            <p class="signUpText">Don't have an account? <a href="{{ route('register') }}">Sign Up</a></p>
+            <p class="loginText">Already have an account? <a href="{{ route('login') }}">Login</a></p>
         </div>
     </div>
 </div>

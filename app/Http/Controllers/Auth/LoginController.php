@@ -21,7 +21,7 @@ class LoginController extends Controller
         ]);
 
         if (Auth::attempt($request->only('email', 'password'))) {
-            return redirect()->intended('/dashboard'); // Redirect to intended page
+            return redirect()->intended('/home'); // Redirect to intended page
         }
 
         return back()->withErrors([
