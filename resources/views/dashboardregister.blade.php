@@ -15,7 +15,7 @@
     </div>
     <div class="body-replace">
         <div class="register-container">
-            <form action="{{ route('register.student') }}" method="POST">
+            <form action="{{ route('register.professor') }}" method="POST">
                 @csrf
                 <h1>Register</h1>
                 @if ($errors->any())
@@ -42,6 +42,13 @@
                 <div class="form-row">
                     <input type="password" name="password_confirmation" id="passwordConfirmationInput" class="form-input" placeholder="Confirm Password">
                     <label for="passwordConfirmationInput" class="form-label">Confirm Password</label>
+                </div>
+                <div class="form-row">
+                    <select name="role" class="form-input">
+                        <option value="professor">Professor</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                    <label for="role" class="form-label">Role</label>
                 </div>
 
                 <button type="submit" class="submitBtn">Register</button>

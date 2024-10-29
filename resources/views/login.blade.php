@@ -39,7 +39,7 @@
 
                 <button type="submit" class="submitBtn">Login</button>
             </form>
-            <p class="signUpText">Don't have an account? <a href="{{ route('register') }}">Sign Up</a></p>
+            <p class="signUpText">Don't have an account? <a href="{{ route('register.student') }}">Sign Up</a></p>
         </div>
     </div>
 </div>

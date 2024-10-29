@@ -9,12 +9,17 @@ use Illuminate\Support\Facades\Hash;
 
 class RegisterController extends Controller
 {
-    public function showRegisterForm()
+    public function showStudentRegisterForm()
     {
-        return view('register');
+        return view('register'); // Return the student registration view
     }
 
-    public function register(Request $request)
+    public function showProfessorRegisterForm()
+    {
+        return view('dashboardregister'); // Return the professor registration view
+    }
+
+    public function registerStudent(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -27,10 +32,33 @@ class RegisterController extends Controller
         $user->name = $request->input('name');
         $user->email = $request->input('email');
         $user->password = Hash::make($request->input('password'));
+        $user->role = 'student'; // Set the role to 'student' for students
         $user->save();
 
         Auth::login($user);
 
-        return redirect()->intended('/home');
+        return redirect()->intended('/');
+    }
+
+    public function registerProfessor(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed',
+            'password_confirmation' => 'required',
+            'role' => 'required|string|in:professor,admin', // Validate professor role
+        ]);
+
+        $user = new \App\Models\User();
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+        $user->password = Hash::make($request->input('password'));
+        $user->role = $request->input('role'); // Use the selected role for professors
+        $user->save();
+
+        Auth::login($user);
+
+        return redirect()->intended('/dashboard');
     }
 }

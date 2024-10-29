@@ -13,7 +13,7 @@ use App\Http\Controllers\Auth\RegisterController; // Import the RegisterControll
 |
 | Here is where you can register web routes for your application.
 | These routes are loaded by the RouteServiceProvider and all of them
-| will be assigned to the "web" middleware group. Make something great!
+| will be assigned to the "web" middleware group.
 |
 */
 
@@ -30,8 +30,13 @@ Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // Registration routes
-Route::get('/register', [RegisterController::class, 'showRegisterForm'])->name('register');
-Route::post('/register', [RegisterController::class, 'register']);
+// Student registration routes
+Route::get('/register/student', [RegisterController::class, 'showStudentRegisterForm'])->name('register.student');
+Route::post('/register/student', [RegisterController::class, 'registerStudent'])->name('register.student.post');
+
+// Professor registration routes
+Route::get('/register/professor', [RegisterController::class, 'showProfessorRegisterForm'])->name('register.professor');
+Route::post('/register/professor', [RegisterController::class, 'registerProfessor'])->name('register.professor.post');
 
 // Dashboard and other existing routes...
 Route::get('/dashboard', function () {
@@ -61,6 +66,12 @@ Route::get('/status-ruangan', function () {
 Route::get('/users', function () {
     return view('users', [
         "title" => "Users"
+    ]);
+});
+
+Route::get('/dashboard-register', function () {
+    return view('dashboardregister', [
+        "title" => "Register Admin"
     ]);
 });
 
