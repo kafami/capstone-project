@@ -37,6 +37,15 @@
     let currentDate = new Date();
     let selectedView = 'day';
 
+    document.addEventListener("DOMContentLoaded", function() {
+        fetchEvents();  // Initialize event fetching and table update
+        updateTodayDate();  // Initialize the today date
+        document.getElementById("view").addEventListener("change", function() {
+            selectedView = this.value;
+            updateTable(eventsData);  // Call updateTable with eventsData on view change
+        });
+    });
+
     function getDisplayedDate() {
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
         const formattedDate = currentDate.toLocaleDateString('en-US', options);
@@ -97,5 +106,5 @@ function nextDate() {
 
     updateTodayDate(); // Initialize the today date
 
-    console.log("Fetched Events:", events);
+    console.log("Fetched Events:", eventsData);
 </script>

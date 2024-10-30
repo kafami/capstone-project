@@ -15,7 +15,7 @@ function fetchEvents() {
                 console.error("Fetched data is not an array:", data);
                 return [];
             }
-            return data;
+            return data; // Return data directly without modification
         })
         .catch(error => {
             console.error("Error fetching events:", error);
@@ -26,7 +26,7 @@ function fetchEvents() {
 fetchEvents().then(events => {
     console.log("Fetched Events:", events); // Log fetched data to check structure
     eventsData = events;
-    updateTable(events);
+    updateTable(eventsData); // Now calling updateTable after data is fetched
 });
 
 // Update the table when the view dropdown changes
@@ -100,11 +100,17 @@ function updateTable(events) {
                 var cell = "<td></td>";  // Default empty cell
                 
                 events.forEach(event => {
-                    if (event && event.room === roomName && event.date === currentDateString) {
-                        var eventStart = timeToMinutes(event.start);
-                        var eventEnd = timeToMinutes(event.end);
+                    // Log the event to inspect its structure
+                    console.log("Current Event:", event);
+
+                    // Check if the event room matches and the date matches
+                    if (event && event.room === roomName && event.booking_date === currentDateString) {
+                        var eventStart = timeToMinutes(event.start); // Use start instead of start_time
+                        var eventEnd = timeToMinutes(event.end); // Use end instead of end_time
                         var slotTime = timeToMinutes(slot);
                         
+                        console.log(`Checking event: ${event.title}, Slot: ${slot}, Event Start: ${eventStart}, Event End: ${eventEnd}, Slot Time: ${slotTime}`);
+
                         if (slotTime >= eventStart && slotTime < eventEnd) {
                             if (slotTime === eventStart) {
                                 var rowSpan = Math.ceil((eventEnd - eventStart) / 30);  // Calculate rowspan
@@ -112,7 +118,7 @@ function updateTable(events) {
                                 console.log(`Rendering event for room: ${roomName}, slot: ${slot}, event: ${event.title}`);
                                 
                                 // Define the event cell with the onclick handler
-                                cell = `<td rowspan="${rowSpan}" class="event ${event.cssClass || ''}" onclick="showEventDetails(${parseInt(event.id)})">${event.title || ''}</td>`;
+                                cell = `<td rowspan="${rowSpan}" class="event ${event.cssClass || ''}" onclick="showEventDetails(${parseInt(event.id)}, '${event.name}', '${event.role}')">${event.title || ''}</td>`;
                             }
                         }
                     }
@@ -129,12 +135,13 @@ function updateTable(events) {
     // Add similar logic for week and month views if necessary...
 }
 
-function showEventDetails(eventId) {
+function showEventDetails(eventId, name, role) {
     console.log("Event ID:", eventId); // Debugging log to ensure event ID is being passed
+    console.log("Event Name:", name); // Debugging log to ensure event name is being passed
+    console.log("Event Role:", role); // Debugging log to ensure event role is being passed
     if (eventId) {
         window.open(`/events/${eventId}`, '_blank');  // Open event details in a new tab
     } else {
         console.error("Event ID not found.");
     }
 }
-

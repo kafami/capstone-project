@@ -21,6 +21,8 @@ class CreateEventBookingsTable extends Migration
             $table->string('event_name');
             $table->text('description')->nullable();
             $table->timestamps();
+            $table->string('name');
+            $table->string('role');
         });
     }
 

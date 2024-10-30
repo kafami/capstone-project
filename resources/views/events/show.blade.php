@@ -10,6 +10,8 @@
     <div class="event-details">
         <h1>{{ $event->event_name }}</h1>
         <p><strong>Room:</strong> {{ $event->room }}</p>
+        <p><strong>Pemesan:</strong> {{ $event->name }}</p>
+        <p><strong>Role:</strong> {{ $event->role }}</p>
         <p><strong>Date:</strong> {{ $event->booking_date }}</p>
         <p><strong>Start Time:</strong> {{ $event->start_time }}</p>
         <p><strong>End Time:</strong> {{ $event->end_time }}</p>
