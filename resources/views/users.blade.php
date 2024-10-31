@@ -34,17 +34,14 @@
             </div>
         </div>
     </div>
+
     <script>
-        const users = [
-            { role: 'Admin', name: 'Pak Sidik', img: '{{ asset("img/admin.svg") }}' },
-            { role: 'Professor', name: 'Pak Arseto', img: '{{ asset("img/professor.svg") }}' },
-            { role: 'Student', name: 'Kaffa', img: '{{ asset("img/student.svg") }}' },
-        ];
+        const users = @json($users);
 
         const roleImages = {
-            'Admin': '{{ asset("img/admin.svg") }}',
-            'Professor': '{{ asset("img/professor.svg") }}',
-            'Student': '{{ asset("img/student.svg") }}'
+            'admin': '{{ asset("img/admin.svg") }}',
+            'professor': '{{ asset("img/professor.svg") }}',
+            'student': '{{ asset("img/student.svg") }}'
         };
 
         const userContainer = document.getElementById('user-container');
@@ -59,7 +56,7 @@
                 infoDiv.className = 'info';
 
                 const img = document.createElement('img');
-                img.src = user.img;
+                img.src = roleImages[user.role] || '{{ asset("img/default-user.svg") }}';
                 img.alt = user.role;
 
                 const roleP = document.createElement('p');
@@ -86,16 +83,6 @@
                 userContainer.appendChild(userHolder);
             });
         }
-
-        document.getElementById('user-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const role = document.getElementById('role').value;
-            const name = document.getElementById('name').value;
-            const img = roleImages[role];
-            users.push({ role, name, img });
-            renderUsers();
-            this.reset();
-        });
 
         // Initial render
         renderUsers();

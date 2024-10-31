@@ -65,5 +65,24 @@ class EventBookingController extends Controller
         
             return response()->json($formattedEvents);
         }
+    public function showDashboard()
+    {
+        $events = EventBooking::with('user')->get(); // Fetch events
+        return view('dashboardkonfirmasi', [
+            'title' => 'Dashboard Konfirmasi',
+            'events' => $events,
+        ]);
     }
+    public function bulkUpdate(Request $request)
+    {
+        $statuses = $request->input('statuses', []);
+
+        foreach ($statuses as $eventId => $status) {
+            EventBooking::where('id', $eventId)->update(['status' => $status]);
+        }
+
+        return redirect()->route('dashboard.konfirmasi')->with('success', 'Statuses updated successfully.');
+    }
+
+}
 

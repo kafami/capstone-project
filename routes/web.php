@@ -4,7 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EventBookingController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\RegisterController; // Import the RegisterController
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\Auth\RegisterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -78,3 +79,9 @@ Route::get('/dashboard-register', function () {
 Route::get('/events/{id}', [EventController::class, 'show']);
 Route::post('/event-booking', [EventBookingController::class, 'store']);
 Route::get('/api/events', [EventBookingController::class, 'getEvents']);
+Route::get('/konfirmasi', [EventBookingController::class, 'showDashboard'])->name('dashboard.konfirmasi');
+Route::get('/users', [UserController::class, 'showUsers'])->name('users.index');
+Route::post('/events/bulk-update', [EventBookingController::class, 'bulkUpdate'])->name('events.bulkUpdate');
+
+
+

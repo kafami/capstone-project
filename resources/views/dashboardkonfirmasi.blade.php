@@ -12,76 +12,55 @@
     <div class="nav">
         @include('partials.dashboardnavbar')
     </div>
-    <div class="dash-main">
-        <div class="main">
-            <div class="option-holder">
-                <p>Konfirmasi Request</p>
-                <div>
-                    <label for="ruangan" class="form-label"><p>Sort By: </p></label>
-                    <select name="ruangan" id="ruangan" class="form-select">
-                        <option value="A201">Date</option>
-                        <option value="A202">Role</option>
-                    </select>
-                </div>
-                <button class="submit-button"><p>Submit</p></button>
-            </div>
-            <div class="konfirmasi-ruangan">
-                <div>
-                    <p class="ruangan">ruangan A202</p>
-                    <p class="peminjam">Kaffa Emirudin</p>
-                    <div class="date-time">
-                        <p class="date">1/10/24</p>
-                        <p class="time">16:30 - 18:00</p>
+    <form action="{{ route('events.bulkUpdate') }}" method="POST">
+        @csrf
+        <div class="dash-main">
+            <div class="main">
+                <div class="option-holder">
+                    <p>Konfirmasi Request</p>
+                    <div>
+                        <label for="ruangan" class="form-label"><p>Sort By: </p></label>
+                        <select name="ruangan" id="ruangan" class="form-select">
+                            <option value="date">Date</option>
+                            <option value="role">Role</option>
+                        </select>
                     </div>
+                    <button type="submit" class="submit-button"><p>Submit</p></button>
                 </div>
-                    <label class="container">
-                        <input class="confirm-box" type="checkbox">
-                        <span class="checkbox-container"></span>
-                    </label>
-                    <label class="container">
-                        <input class="deny-box" type="checkbox">
-                        <span class="checkbox-container"></span>
-                    </label>
-            </div>
-    
-            <div class="konfirmasi-ruangan">
-                <div>
-                    <p class="ruangan">ruangan A201</p>
-                    <p class="peminjam">Kevin Ryo Pratama</p>
-                    <div class="date-time">
-                        <p class="date">1/13/24</p>
-                        <p class="time">16:30 - 18:00</p>
+
+                @foreach ($events as $event)
+                    <div class="konfirmasi-ruangan">
+                        <div>
+                            <p class="ruangan">Ruangan {{ $event->room }}</p>
+                            <p class="peminjam">{{ $event->name }}</p>
+                            <p class="peminjam">{{ $event->role }}</p>
+                            <div class="date-time">
+                                <p class="date">{{ \Carbon\Carbon::parse($event->booking_date)->format('m/d/y') }}</p>
+                                <p class="time">{{ $event->start_time }} - {{ $event->end_time }}</p>
+                            </div>
+                        </div>
+                        <label class="container">
+                            <input type="checkbox" name="statuses[{{ $event->id }}]" value="accepted" class="confirm-box" onclick="toggleCheckbox(this)">
+                            <span class="checkbox-container"></span>
+                        </label>
+                        <label class="container">
+                            <input type="checkbox" name="statuses[{{ $event->id }}]" value="denied" class="deny-box" onclick="toggleCheckbox(this)">
+                            <span class="checkbox-container"></span>
+                        </label>
                     </div>
-                </div>
-                <label class="container">
-                    <input class="confirm-box" type="checkbox">
-                    <span class="checkbox-container"></span>
-                </label>
-                <label class="container">
-                    <input class="deny-box" type="checkbox">
-                    <span class="checkbox-container"></span>
-                </label>
-            </div>
-    
-            <div class="konfirmasi-ruangan">
-                <div>
-                    <p class="ruangan">ruangan A102</p>
-                    <p class="peminjam">Elmar</p>
-                    <div class="date-time">
-                        <p class="date">1/13/24</p>
-                        <p class="time">16:30 - 18:00</p>
-                    </div>
-                </div>
-                <label class="container">
-                    <input class="confirm-box" type="checkbox">
-                    <span class="checkbox-container"></span>
-                </label>
-                <label class="container">
-                    <input class="deny-box" type="checkbox">
-                    <span class="checkbox-container"></span>
-                </label>
+                @endforeach
             </div>
         </div>
-    </div>
+    </form>
+
+<script>
+    function toggleCheckbox(selectedCheckbox) {
+        const checkboxes = selectedCheckbox.closest('.konfirmasi-ruangan').querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(checkbox => {
+            if (checkbox !== selectedCheckbox) checkbox.checked = false;
+        });
+    }
+</script>
+
 </body>
 </html>

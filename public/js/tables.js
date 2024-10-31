@@ -25,8 +25,11 @@ function fetchEvents() {
 
 fetchEvents().then(events => {
     console.log("Fetched Events:", events); // Log fetched data to check structure
-    eventsData = events;
-    updateTable(eventsData); // Now calling updateTable after data is fetched
+
+    // Filter events to include only those with 'accepted' status
+    eventsData = events.filter(event => event.status === 'accepted');
+
+    updateTable(eventsData); // Now calling updateTable with filtered data
 });
 
 // Update the table when the view dropdown changes
