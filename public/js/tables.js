@@ -25,11 +25,8 @@ function fetchEvents() {
 
 fetchEvents().then(events => {
     console.log("Fetched Events:", events); // Log fetched data to check structure
-
-    // Filter events to include only those with 'accepted' status
-    eventsData = events.filter(event => event.status === 'accepted');
-
-    updateTable(eventsData); // Now calling updateTable with filtered data
+    eventsData = events;
+    updateTable(eventsData); // Now calling updateTable after data is fetched
 });
 
 // Update the table when the view dropdown changes
@@ -95,48 +92,51 @@ function updateTable(events) {
 
         var slots = createTimeSlots();
 
+        // Track cells that have already been spanned by rowSpan
+        let spannedCells = {};
+
         // Render rows for each time slot
-        slots.forEach(slot => {
+        slots.forEach((slot, slotIndex) => {
             var row = `<tr><td>${slot}</td>`;
             
             roomNames.forEach(roomName => {
                 var cell = "<td></td>";  // Default empty cell
-                
-                events.forEach(event => {
-                    // Log the event to inspect its structure
-                    console.log("Current Event:", event);
 
+                events.forEach(event => {
                     // Check if the event room matches and the date matches
                     if (event && event.room === roomName && event.booking_date === currentDateString) {
-                        var eventStart = timeToMinutes(event.start); // Use start instead of start_time
-                        var eventEnd = timeToMinutes(event.end); // Use end instead of end_time
-                        var slotTime = timeToMinutes(slot);
-                        
-                        console.log(`Checking event: ${event.title}, Slot: ${slot}, Event Start: ${eventStart}, Event End: ${eventEnd}, Slot Time: ${slotTime}`);
+                        const eventStart = timeToMinutes(event.start);
+                        const eventEnd = timeToMinutes(event.end);
+                        const slotTime = timeToMinutes(slot);
 
+                        // Only add a cell with rowspan for the start time of the event
                         if (slotTime >= eventStart && slotTime < eventEnd) {
-                            if (slotTime === eventStart) {
-                                var rowSpan = Math.ceil((eventEnd - eventStart) / 30);  // Calculate rowspan
-                                
-                                console.log(`Rendering event for room: ${roomName}, slot: ${slot}, event: ${event.title}`);
-                                
+                            if (slotTime === eventStart && !spannedCells[`${event.room}-${eventStart}`]) {
+                                const rowSpan = Math.ceil((eventEnd - eventStart) / 30);
+
                                 // Define the event cell with the onclick handler
                                 cell = `<td rowspan="${rowSpan}" class="event ${event.cssClass || ''}" onclick="showEventDetails(${parseInt(event.id)}, '${event.name}', '${event.role}')">${event.title || ''}</td>`;
+                                
+                                // Mark this cell as spanned to avoid duplicate rendering in subsequent slots
+                                spannedCells[`${event.room}-${eventStart}`] = true;
+                            } else {
+                                cell = "";  // Leave blank for cells covered by rowspan
                             }
                         }
                     }
                 });
-                
+
                 row += cell;
             });
 
             row += "</tr>";
-            tableBody.insertAdjacentHTML("beforeend", row);  // Insert the row
+            tableBody.insertAdjacentHTML("beforeend", row);
         });
     }
     
     // Add similar logic for week and month views if necessary...
 }
+
 
 function showEventDetails(eventId, name, role) {
     console.log("Event ID:", eventId); // Debugging log to ensure event ID is being passed
