@@ -18,6 +18,9 @@ class EventBooking extends Model
         'event_name',
         'description',
         'status',
+        'user_id',
+        'name',
+        'role',
     ];
 
     public function user()

@@ -32,6 +32,8 @@
                     <div class="konfirmasi-ruangan">
                         <div>
                             <p class="ruangan">Ruangan {{ $event->room }}</p>
+                            <p class="ruangan"> {{ $event->event_name }}</p>
+                            <p class="ruangan"> {{ $event->description }}</p>
                             <p class="peminjam">{{ $event->name }}</p>
                             <p class="peminjam">{{ $event->role }}</p>
                             <div class="date-time">
@@ -49,6 +51,7 @@
                         </label>
                     </div>
                 @endforeach
+
             </div>
         </div>
     </form>

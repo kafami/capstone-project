@@ -35,7 +35,26 @@ document.getElementById("view").addEventListener("change", function() {
 });
 
 // Room names for the table headers
-const roomNames = ['A101', 'A102', 'A201', 'A202'];
+let roomNames = [];
+
+// Fetch rooms dynamically
+function fetchRooms() {
+    return fetch('/api/rooms')
+        .then(response => response.json())
+        .then(data => {
+            roomNames = data.map(room => room.name);
+            console.log("Fetched Rooms:", roomNames);
+        })
+        .catch(error => console.error("Error fetching rooms:", error));
+}
+
+fetchRooms().then(() => {
+    // Initialize or refresh the table with updated room names
+    fetchEvents().then(events => {
+        updateTable(events);
+    });
+});
+
 
 function updateTable(events) {
     console.log("updateTable function called");
@@ -139,12 +158,42 @@ function updateTable(events) {
 
 
 function showEventDetails(eventId, name, role) {
-    console.log("Event ID:", eventId); // Debugging log to ensure event ID is being passed
-    console.log("Event Name:", name); // Debugging log to ensure event name is being passed
-    console.log("Event Role:", role); // Debugging log to ensure event role is being passed
-    if (eventId) {
-        window.open(`/events/${eventId}`, '_blank');  // Open event details in a new tab
-    } else {
+    if (!eventId) {
         console.error("Event ID not found.");
+        return;
+    }
+
+    // Find the event details from the eventsData array
+    const event = eventsData.find(e => e.id === eventId);
+
+    if (event) {
+        // Populate the modal with event details
+        document.getElementById('modalEventTitle').textContent = event.title || 'Event Details';
+        document.getElementById('modalEventRoom').textContent = event.room || 'N/A';
+        document.getElementById('modalEventName').textContent = name || 'N/A';
+        document.getElementById('modalEventRole').textContent = role || 'N/A';
+        document.getElementById('modalEventDate').textContent = event.booking_date || 'N/A';
+        document.getElementById('modalEventStartTime').textContent = event.start || 'N/A';
+        document.getElementById('modalEventEndTime').textContent = event.end || 'N/A';
+        document.getElementById('modalEventDescription').textContent = event.description || 'N/A';
+        document.getElementById('modalEventStatus').textContent = event.status || 'N/A';
+
+        // Show the modal
+        document.getElementById('eventModal').style.display = 'block';
+    } else {
+        console.error("Event not found for ID:", eventId);
     }
 }
+
+// Function to close the modal
+function closeModal() {
+    document.getElementById('eventModal').style.display = 'none';
+}
+
+// Add a click event listener to close the modal when clicking outside of it
+window.addEventListener('click', function (event) {
+    const modal = document.getElementById('eventModal');
+    if (event.target === modal) {
+        modal.style.display = 'none';
+    }
+});

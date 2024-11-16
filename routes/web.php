@@ -6,6 +6,8 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Models\Room;
+use App\Http\Controllers\RoomController;
 
 /*
 |--------------------------------------------------------------------------
@@ -83,5 +85,14 @@ Route::get('/konfirmasi', [EventBookingController::class, 'showDashboard'])->nam
 Route::get('/users', [UserController::class, 'showUsers'])->name('users.index');
 Route::post('/events/bulk-update', [EventBookingController::class, 'bulkUpdate'])->name('events.bulkUpdate');
 
+Route::get('/api/rooms', function () {
+    return Room::all();
+});
 
 
+Route::resource('rooms', RoomController::class)->middleware('auth');
+Route::get('/rooms', [RoomController::class, 'index'])->name('rooms.index');
+Route::post('/rooms', [RoomController::class, 'store'])->name('rooms.store');
+Route::get('/rooms/{room}/edit', [RoomController::class, 'edit'])->name('rooms.edit');
+Route::put('/rooms/{room}', [RoomController::class, 'update'])->name('rooms.update');
+Route::delete('/rooms/{room}', [RoomController::class, 'destroy'])->name('rooms.destroy');

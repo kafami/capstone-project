@@ -7,16 +7,20 @@
     <title>Event Details</title>
 </head>
 <body>
-    <div class="event-details">
-        <h1>{{ $event->event_name }}</h1>
-        <p><strong>Room:</strong> {{ $event->room }}</p>
-        <p><strong>Pemesan:</strong> {{ $event->name }}</p>
-        <p><strong>Role:</strong> {{ $event->role }}</p>
-        <p><strong>Date:</strong> {{ $event->booking_date }}</p>
-        <p><strong>Start Time:</strong> {{ $event->start_time }}</p>
-        <p><strong>End Time:</strong> {{ $event->end_time }}</p>
-        <p><strong>Description:</strong> {{ $event->description }}</p>
-        <p><strong>Status:</strong> {{ $event->status }}</p>
+    <div id="eventModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h1 id="modalEventTitle"></h1>
+            <p><strong>Room:</strong> <span id="modalEventRoom"></span></p>
+            <p><strong>Pemesan:</strong> <span id="modalEventName"></span></p>
+            <p><strong>Role:</strong> <span id="modalEventRole"></span></p>
+            <p><strong>Date:</strong> <span id="modalEventDate"></span></p>
+            <p><strong>Start Time:</strong> <span id="modalEventStartTime"></span></p>
+            <p><strong>End Time:</strong> <span id="modalEventEndTime"></span></p>
+            <p><strong>Description:</strong> <span id="modalEventDescription"></span></p>
+            <p><strong>Status:</strong> <span id="modalEventStatus"></span></p>
+        </div>
     </div>
 </body>
 </html>
+<script src="{{ asset('js/tables.js') }}"></script>

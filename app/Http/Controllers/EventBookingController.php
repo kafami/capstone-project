@@ -8,46 +8,47 @@ use App\Models\User;
 
 class EventBookingController extends Controller
 {
-        public function store(Request $request)
-        {
-            $request->validate([
-                'room' => 'required|string',
-                'booking_date' => 'required|date',
-                'start_time' => 'required|date_format:H:i',
-                'end_time' => 'required|date_format:H:i|after:start_time',
-                'event_type' => 'required|string',
-                'event_name' => 'required|string',
-                'description' => 'nullable|string',
-                'status' => 'required|string',
-                'name' => 'required|string',
-                'role' => 'required|string',
-            ]);
-        
-            // Get the authenticated user
-            $user = auth()->user();
-        
-            // Create a new event booking
-            $eventBooking = EventBooking::create([
-                'room' => $request->room,
-                'booking_date' => $request->booking_date,
-                'start_time' => $request->start_time,
-                'end_time' => $request->end_time,
-                'event_type' => $request->event_type,
-                'event_name' => $request->event_name,
-                'description' => $request->description,
-                'status' => $request->status,
-                'user_id' => $user->id, // Save the user ID
-            ]);
-        
-            return response()->json(['message' => 'Event booked successfully!'], 201);
-        }
+    public function store(Request $request)
+    {
+        $request->validate([
+            'room' => 'required|string',
+            'booking_date' => 'required|date',
+            'start_time' => 'required|date_format:H:i',
+            'end_time' => 'required|date_format:H:i|after:start_time',
+            'event_type' => 'required|string',
+            'event_name' => 'required|string',
+            'description' => 'nullable|string',
+            'status' => 'required|string',
+        ]);
+
+        // Get the authenticated user
+        $user = auth()->user();
+
+        // Create a new event booking
+        $eventBooking = EventBooking::create([
+            'room' => $request->room,
+            'booking_date' => $request->booking_date,
+            'start_time' => $request->start_time,
+            'end_time' => $request->end_time,
+            'event_type' => $request->event_type,
+            'event_name' => $request->event_name,
+            'description' => $request->description,
+            'status' => $request->status,
+            'user_id' => $user->id, // Automatically set the user ID
+            'name' => $user->name, // Automatically set the user's name
+            'role' => $user->role, // Automatically set the user's role
+        ]);
+
+        return response()->json(['message' => 'Event booked successfully!'], 201);
+    }
+
+    
 
         // Add this method to fetch events
         public function getEvents()
         {
             $events = EventBooking::with('user')->get();
-        
-            // Format the events data as needed
+
             $formattedEvents = $events->map(function ($event) {
                 return [
                     'id' => $event->id,
@@ -60,19 +61,26 @@ class EventBookingController extends Controller
                     'cssClass' => 'event-' . strtolower(str_replace(' ', '-', $event->event_type)),
                     'name' => $event->name,
                     'role' => $event->role,
+                    'user_id' => $event->user_id, // Include the user ID
+                    'description' => $event->description,
                 ];
             });
-        
+
             return response()->json($formattedEvents);
         }
+
+
     public function showDashboard()
     {
-        $events = EventBooking::with('user')->get(); // Fetch events
+        // Fetch only events with pending status
+        $events = EventBooking::where('status', 'pending')->with('user')->get();
+
         return view('dashboardkonfirmasi', [
             'title' => 'Dashboard Konfirmasi',
             'events' => $events,
         ]);
     }
+    
     public function bulkUpdate(Request $request)
     {
         $statuses = $request->input('statuses', []);

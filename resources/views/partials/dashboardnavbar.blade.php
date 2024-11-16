@@ -8,27 +8,23 @@
 
         <div class="dashboard-option">
             <img class="dashNavicons" src="{{ asset('img/home.svg') }}" alt="">
-            <a href="/"><p class="navText">
-                Home
-            </p></a>
+            <a href="/"><p class="navText">Home</p></a>
         </div>
         <div class="dashboard-option">
             <img class="dashNavicons" src="{{ asset('img/calendar.svg') }}" alt="">
-            <a href="/konfirmasi"><p class="navText">
-                Konfirmasi Request
-            </p></a>
+            <a href="/konfirmasi"><p class="navText">Konfirmasi Request</p></a>
         </div>
         <div class="dashboard-option">
             <img class="dashNavicons" src="{{ asset('img/user.svg') }}" alt="">
-            <a href="/users"><p class="navText">
-                Users
-            </p></a>
+            <a href="/users"><p class="navText">Users</p></a>
+        </div>
+        <div class="dashboard-option">
+            <img class="dashNavicons" src="{{ asset('img/rooms.svg') }}" alt=""> <!-- Add appropriate icon -->
+            <a href="/rooms"><p class="navText">Rooms</p></a> <!-- New Rooms option -->
         </div>
         <div class="dashboard-option">
             <img class="dashNavicons" src="{{ asset('img/logout.svg') }}" alt="">
-            <a href="/"><p class="navText">
-                Logout
-            </p></a>
+            <a href="/"><p class="navText">Logout</p></a>
         </div>
     </div>
 </div>
