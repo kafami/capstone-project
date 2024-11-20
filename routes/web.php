@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Models\Room;
 use App\Http\Controllers\RoomController;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,17 +21,29 @@ use App\Http\Controllers\RoomController;
 |
 */
 
-// Existing routes...
+
 Route::get('/', function () {
-    return view('home', [
-        "title" => "Home"
-    ]);
+    return redirect()->route('login');
 });
 
 // Login routes
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/home', function () {
+        return view('home', [
+            "title" => "Home"
+        ]);
+    });
+
+    Route::get('/peminjaman-ruangan', function () {
+        return view('peminjaman', [
+            "title" => "Peminjaman Ruangan"
+        ]);
+    });
+});
 
 // Registration routes
 // Student registration routes
@@ -48,15 +61,11 @@ Route::get('/dashboard', function () {
     ]);
 });
 
+Route::get('/booking-history', [EventBookingController::class, 'showBookingHistory'])->name('booking.history');
+
 Route::get('/konfirmasi', function () {
     return view('dashboardkonfirmasi', [
         "title" => "Konfirmasi"
-    ]);
-});
-
-Route::get('/peminjaman-ruangan', function () {
-    return view('peminjaman', [
-        "title" => "Peminjaman Ruangan"
     ]);
 });
 

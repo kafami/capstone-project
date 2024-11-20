@@ -14,7 +14,7 @@
     <div class="navbarMenu">
         <div class="navbarMenuOpt">
             <img class="navbar-icon-image" src="{{ asset('img/iconsRoomInformation.svg') }}" alt="">
-            <a class="navbar-icon" href="/"><p>Room Information</p></a>
+            <a class="navbar-icon" href="/home"><p>Room Information</p></a>
         </div>
 
         <span class="fa-stack">
@@ -26,19 +26,23 @@
             <a href="/peminjaman-ruangan"><p>Peminjaman Ruangan</p></a>
         </div>
 
-        <div class="navbarMenuOpt">
-            <img class="navbar-icon-image" src="{{ asset('img/iconsLogin.svg') }}" alt="">
-            <a class="navbar-icon" href="/login"><p>Login</p></a>
-        </div>
+
     </div>
     <div class="profile-dropdown">
-        <img class="profile-img" src="{{ asset('img/kaffa.jpg') }}" alt="Profile Image">
-        <div class="profile-dropdown-content">
-          <a href="#">Edit Profile</a>
-          <a href="/status-ruangan">Status Ruangan</a>
-          <a href="#">Logout</a>
-        </div>
+    <img class="profile-img" 
+         src="{{ auth()->user() && auth()->user()->profile_image ? asset('storage/' . auth()->user()->profile_image) : asset('img/blank-profile.jpg') }}" 
+         alt="Profile Image">
+    <div class="profile-dropdown-content">
+        <a href="#">Edit Profile</a>
+        <a href="/status-ruangan">Status Ruangan</a>
+        <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            @csrf
+        </form>
+
     </div>
+</div>
+
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>

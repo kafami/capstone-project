@@ -61,12 +61,15 @@ function updateTable(events) {
     const currentDateInput = document.getElementById('current-date-input');
     console.log("Current date input value:", currentDateInput.value);
     let currentDate = new Date(currentDateInput.value);
-    const currentDateString = currentDate.toISOString().split('T')[0];  // Current date string
+    const currentDateString = currentDate.toISOString().split('T')[0]; // Current date string
 
     if (!Array.isArray(events)) {
         console.error("Events data is not an array:", events);
         return;
     }
+
+    // Filter events to only include those with 'accepted' status
+    events = events.filter(event => event.status === 'accepted');
 
     var viewDropdown = document.getElementById("view");
     var selectedView = viewDropdown ? viewDropdown.value : "day";

@@ -34,9 +34,9 @@ class EventBookingController extends Controller
             'event_name' => $request->event_name,
             'description' => $request->description,
             'status' => $request->status,
-            'user_id' => $user->id, // Automatically set the user ID
-            'name' => $user->name, // Automatically set the user's name
-            'role' => $user->role, // Automatically set the user's role
+            'user_id' => $user->id, 
+            'name' => $user->name, 
+            'role' => $user->role, 
         ]);
 
         return response()->json(['message' => 'Event booked successfully!'], 201);
@@ -61,7 +61,7 @@ class EventBookingController extends Controller
                     'cssClass' => 'event-' . strtolower(str_replace(' ', '-', $event->event_type)),
                     'name' => $event->name,
                     'role' => $event->role,
-                    'user_id' => $event->user_id, // Include the user ID
+                    'user_id' => $event->user_id, 
                     'description' => $event->description,
                 ];
             });
@@ -91,6 +91,13 @@ class EventBookingController extends Controller
 
         return redirect()->route('dashboard.konfirmasi')->with('success', 'Statuses updated successfully.');
     }
+
+    public function showBookingHistory()
+    {
+        $bookings = EventBooking::all(); // Fetch all bookings
+        return view('booking_history', compact('bookings'));
+    }
+
 
 }
 

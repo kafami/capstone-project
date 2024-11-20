@@ -19,8 +19,12 @@
             <a href="/users"><p class="navText">Users</p></a>
         </div>
         <div class="dashboard-option">
-            <img class="dashNavicons" src="{{ asset('img/rooms.svg') }}" alt=""> <!-- Add appropriate icon -->
-            <a href="/rooms"><p class="navText">Rooms</p></a> <!-- New Rooms option -->
+            <img class="dashNavicons" src="{{ asset('img/rooms.svg') }}" alt="">
+            <a href="/rooms"><p class="navText">Rooms</p></a> 
+        </div>
+        <div class="dashboard-option">
+            <img class="dashNavicons" src="{{ asset('img/history.svg') }}" alt="">
+            <a href="/booking-history"><p class="navText">History</p></a> 
         </div>
         <div class="dashboard-option">
             <img class="dashNavicons" src="{{ asset('img/logout.svg') }}" alt="">

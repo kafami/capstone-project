@@ -10,9 +10,6 @@
 </head>
 <body>
 <div class="elements">
-    <div class="navbar-holder">
-        @include('partials.navbar')
-    </div>
     <div class="body-replace">
         <div class="login-container">
             <form action="{{ route('login') }}" method="POST">
