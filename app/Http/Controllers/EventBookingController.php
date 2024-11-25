@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\EventBooking;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class EventBookingController extends Controller
 {
@@ -98,6 +99,32 @@ class EventBookingController extends Controller
         return view('booking_history', compact('bookings'));
     }
 
+    public function showAcceptedEventsForToday()
+    {
+        $today = \Carbon\Carbon::now()->toDateString();
+        $acceptedBookings = EventBooking::where('status', 'accepted')->whereDate('booking_date', '>=', $today)->get(); // Fetch only accepted bookings for today
+        return view('accepted_events', compact('acceptedBookings'));
+    }
 
+    public function deleteBooking($id)
+    {
+        $booking = EventBooking::find($id);
+        if ($booking) {
+            $booking->delete();
+        }
+        return redirect()->route('accepted.events')->with('success', 'Booking deleted successfully.');
+    }
+
+    public function showUserBookings()
+    {
+        // Get the authenticated user's bookings
+        $user = Auth::user();
+        $bookings = EventBooking::where('user_id', $user->id)->get();
+
+        return view('user_bookings', [
+            'title' => 'My Bookings',
+            'bookings' => $bookings,
+        ]);
+    }
 }
 

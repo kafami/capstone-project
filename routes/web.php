@@ -105,3 +105,11 @@ Route::post('/rooms', [RoomController::class, 'store'])->name('rooms.store');
 Route::get('/rooms/{room}/edit', [RoomController::class, 'edit'])->name('rooms.edit');
 Route::put('/rooms/{room}', [RoomController::class, 'update'])->name('rooms.update');
 Route::delete('/rooms/{room}', [RoomController::class, 'destroy'])->name('rooms.destroy');
+
+Route::get('/accepted-events', [EventBookingController::class, 'showAcceptedEventsForToday'])->name('accepted.events');
+Route::delete('/delete-booking/{id}', [EventBookingController::class, 'deleteBooking'])->name('delete.booking');
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/my-bookings', [EventBookingController::class, 'showUserBookings'])->name('user.bookings');
+});

@@ -26,6 +26,10 @@
             <a href="/peminjaman-ruangan"><p>Peminjaman Ruangan</p></a>
         </div>
 
+        <div class="navbarMenuOpt">
+            <img class="navbar-icon-image" src="{{ asset('img/status.svg') }}" alt="">
+            <a class="navbar-icon" href="/my-bookings"><p>Status Ruangan</p></a>
+        </div>
 
     </div>
     <div class="profile-dropdown">
@@ -34,7 +38,6 @@
          alt="Profile Image">
     <div class="profile-dropdown-content">
         <a href="#">Edit Profile</a>
-        <a href="/status-ruangan">Status Ruangan</a>
         <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
             @csrf

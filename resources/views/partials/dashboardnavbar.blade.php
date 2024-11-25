@@ -15,16 +15,20 @@
             <a href="/konfirmasi"><p class="navText">Konfirmasi Request</p></a>
         </div>
         <div class="dashboard-option">
+            <img class="dashNavicons" src="{{ asset('img/accepted.svg') }}" alt="">
+            <a href="/accepted-events"><p class="navText">accepted</p></a>
+        </div>
+        <div class="dashboard-option">
+            <img class="dashNavicons" src="{{ asset('img/history.svg') }}" alt="">
+            <a href="/booking-history"><p class="navText">History</p></a> 
+        </div>
+        <div class="dashboard-option">
             <img class="dashNavicons" src="{{ asset('img/user.svg') }}" alt="">
             <a href="/users"><p class="navText">Users</p></a>
         </div>
         <div class="dashboard-option">
             <img class="dashNavicons" src="{{ asset('img/rooms.svg') }}" alt="">
             <a href="/rooms"><p class="navText">Rooms</p></a> 
-        </div>
-        <div class="dashboard-option">
-            <img class="dashNavicons" src="{{ asset('img/history.svg') }}" alt="">
-            <a href="/booking-history"><p class="navText">History</p></a> 
         </div>
         <div class="dashboard-option">
             <img class="dashNavicons" src="{{ asset('img/logout.svg') }}" alt="">

@@ -57,6 +57,7 @@
 
 
 #reservationTable td {
+    max-width: 10px;
     min-height: 30px; /* Adjust as necessary */
     vertical-align: top;
     padding: 10px;

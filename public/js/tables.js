@@ -61,6 +61,8 @@ function updateTable(events) {
     const currentDateInput = document.getElementById('current-date-input');
     console.log("Current date input value:", currentDateInput.value);
     let currentDate = new Date(currentDateInput.value);
+    currentDate.setDate(currentDate.getDate() + 1); // Adjusted to add one day
+    currentDate.setHours(0, 0, 0, 0); // Reset time to midnight
     const currentDateString = currentDate.toISOString().split('T')[0]; // Current date string
 
     if (!Array.isArray(events)) {
@@ -154,10 +156,58 @@ function updateTable(events) {
             row += "</tr>";
             tableBody.insertAdjacentHTML("beforeend", row);
         });
+    } else if (selectedView === "week") {
+        // Render week view headers (Days as columns)
+        headerRow.insertAdjacentHTML("beforeend", "<th>Room</th>");
+        const weekDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+        weekDays.forEach(day => {
+            headerRow.insertAdjacentHTML("beforeend", `<th>${day}</th>`);
+        });
+
+        // Render rows for each room
+        roomNames.forEach(roomName => {
+            var row = `<tr><td>${roomName}</td>`;
+            weekDays.forEach(day => {
+                let cell = "<td></td>";
+                events.forEach(event => {
+                    // Check if the event room and day match
+                    if (event && event.room === roomName && new Date(event.booking_date).getDay() === weekDays.indexOf(day) + 1) {
+                        cell = `<td class="event ${event.cssClass || ''}" onclick="showEventDetails(${parseInt(event.id)}, '${event.name}', '${event.role}')">${event.title || ''}</td>`;
+                    }
+                });
+                row += cell;
+            });
+            row += "</tr>";
+            tableBody.insertAdjacentHTML("beforeend", row);
+        });
+    } else if (selectedView === "month") {
+        // Render month view headers (Days of the month as columns)
+        headerRow.insertAdjacentHTML("beforeend", "<th>Room</th>");
+        const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
+        for (let day = 1; day <= daysInMonth; day++) {
+            headerRow.insertAdjacentHTML("beforeend", `<th>${day}</th>`);
+        }
+
+        // Render rows for each room
+        roomNames.forEach(roomName => {
+            var row = `<tr><td>${roomName}</td>`;
+            for (let day = 1; day <= daysInMonth; day++) {
+                let cell = "<td></td>";
+                events.forEach(event => {
+                    const eventDate = new Date(event.booking_date);
+                    // Check if the event room and date match
+                    if (event && event.room === roomName && eventDate.getDate() === day && eventDate.getMonth() === currentDate.getMonth()) {
+                        cell = `<td class="event ${event.cssClass || ''}" onclick="showEventDetails(${parseInt(event.id)}, '${event.name}', '${event.role}')">${event.title || ''}</td>`;
+                    }
+                });
+                row += cell;
+            }
+            row += "</tr>";
+            tableBody.insertAdjacentHTML("beforeend", row);
+        });
     }
-    
-    // Add similar logic for week and month views if necessary...
 }
+
 
 
 function showEventDetails(eventId, name, role) {
