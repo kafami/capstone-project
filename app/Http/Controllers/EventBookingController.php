@@ -22,6 +22,22 @@ class EventBookingController extends Controller
             'status' => 'required|string',
         ]);
 
+        $isConflict = EventBooking::where('room', $request->room)
+        ->where('booking_date', $request->booking_date)
+        ->where(function ($query) use ($request) {
+            $query->whereBetween('start_time', [$request->start_time, $request->end_time])
+                ->orWhereBetween('end_time', [$request->start_time, $request->end_time])
+                ->orWhere(function ($query) use ($request) {
+                    $query->where('start_time', '<=', $request->start_time)
+                        ->where('end_time', '>=', $request->end_time);
+                });
+        })
+        ->exists();
+
+    if ($isConflict) {
+        return response()->json(['message' => 'The room is already booked for the selected date and time.'], 422);
+    }
+
         // Get the authenticated user
         $user = auth()->user();
 

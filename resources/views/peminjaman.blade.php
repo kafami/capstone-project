@@ -135,15 +135,18 @@ $(document).ready(function() {
             success: function(response) {
                 alert(response.message);
             },
+
             error: function(xhr) {
-                alert('An error occurred: ' + xhr.responseText);
+                if (xhr.status === 422) {
+                    const errors = JSON.parse(xhr.responseText);
+                    alert(errors.message); // Show validation error message
+                } else {
+                    alert('An error occurred: ' + xhr.responseText);
+                }
             }
+
         });
     });
 });
 </script>
-
-
-
-
 </html>

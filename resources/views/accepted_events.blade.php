@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="container mt-5">
-        <h2 class="mb-4">Accepted Events for Today</h2>
+        <h2 class="mb-4">Accepted Upcoming Events</h2>
         <table class="table table-striped">
             <thead>
                 <tr>
