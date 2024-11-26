@@ -23,7 +23,7 @@
         </span>
         
         <div class="calendarOpt">
-            <a href="/peminjaman-ruangan"><p>Peminjaman Ruangan</p></a>
+            <a href="javascript:void(0);" id="open-popup-link"><p>Peminjaman Ruangan</p></a>
         </div>
 
         <div class="navbarMenuOpt">

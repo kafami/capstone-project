@@ -24,6 +24,7 @@ class EventBookingController extends Controller
 
         $isConflict = EventBooking::where('room', $request->room)
         ->where('booking_date', $request->booking_date)
+        ->where('status', 'accepted')
         ->where(function ($query) use ($request) {
             $query->whereBetween('start_time', [$request->start_time, $request->end_time])
                 ->orWhereBetween('end_time', [$request->start_time, $request->end_time])
