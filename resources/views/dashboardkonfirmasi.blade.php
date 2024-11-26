@@ -29,11 +29,11 @@
                 </div>
 
                 @foreach ($events as $event)
-                    <div class="konfirmasi-ruangan">
+                    <div class="konfirmasi-ruangan {{ $event->is_conflict ? 'conflict' : '' }}">
                         <div>
                             <p class="ruangan">Ruangan {{ $event->room }}</p>
-                            <p class="ruangan"> {{ $event->event_name }}</p>
-                            <p class="ruangan"> {{ $event->description }}</p>
+                            <p class="ruangan">{{ $event->event_name }}</p>
+                            <p class="ruangan">{{ $event->description }}</p>
                             <p class="peminjam">{{ $event->name }}</p>
                             <p class="peminjam">{{ $event->role }}</p>
                             <div class="date-time">
@@ -42,7 +42,7 @@
                             </div>
                         </div>
                         <label class="container">
-                            <input type="checkbox" name="statuses[{{ $event->id }}]" value="accepted" class="confirm-box" onclick="toggleCheckbox(this)">
+                            <input type="checkbox" name="statuses[{{ $event->id }}]" value="accepted" class="confirm-box" onclick="toggleCheckbox(this)" {{ $event->is_conflict ? 'disabled' : '' }}>
                             <span class="checkbox-container"></span>
                         </label>
                         <label class="container">
@@ -51,6 +51,7 @@
                         </label>
                     </div>
                 @endforeach
+
 
             </div>
         </div>
@@ -63,6 +64,17 @@
             if (checkbox !== selectedCheckbox) checkbox.checked = false;
         });
     }
+    document.querySelector('form').addEventListener('submit', function (e) {
+        const conflictingCheckBoxes = document.querySelectorAll('.konfirmasi-ruangan.conflict .confirm-box:checked');
+
+        console.log("Conflicting checkboxes:", conflictingCheckBoxes);
+
+        if (conflictingCheckBoxes.length > 0) {
+            alert('You cannot confirm events that have conflicts. Please resolve the conflicts first.');
+            e.preventDefault(); 
+        }
+    });
+
 </script>
 
 </body>

@@ -1,8 +1,7 @@
 let eventsData = [];
 
-// Function to fetch events from the server
 function fetchEvents() {
-    return fetch('/api/events') // Adjust the route if necessary
+    return fetch('/api/events')
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -10,34 +9,31 @@ function fetchEvents() {
             return response.json();
         })
         .then(data => {
-            console.log("Fetched Events:", data); // Log fetched data
+            console.log("Fetched Events:", data);
             if (!Array.isArray(data)) {
                 console.error("Fetched data is not an array:", data);
                 return [];
             }
-            return data; // Return data directly without modification
+            return data;
         })
         .catch(error => {
             console.error("Error fetching events:", error);
-            return []; // Return an empty array on error
+            return []; 
         });
 }
 
 fetchEvents().then(events => {
-    console.log("Fetched Events:", events); // Log fetched data to check structure
+    console.log("Fetched Events:", events);
     eventsData = events;
-    updateTable(eventsData); // Now calling updateTable after data is fetched
+    updateTable(eventsData); 
 });
 
-// Update the table when the view dropdown changes
 document.getElementById("view").addEventListener("change", function() {
     updateTable(eventsData);
 });
 
-// Room names for the table headers
 let roomNames = [];
 
-// Fetch rooms dynamically
 function fetchRooms() {
     return fetch('/api/rooms')
         .then(response => response.json())
@@ -115,21 +111,21 @@ function updateTable(events) {
         let spannedCells = {};
 
         slots.forEach((slot, slotIndex) => {
-            var row = `<tr><td>${slot}</td>`;
+            let row = `<tr><td>${slot}</td>`;
             
             roomNames.forEach(roomName => {
-                var cell = "<td></td>"; 
-
+                let cell = `<td onclick="openPopup('${roomName}', '${slot}')"></td>`; 
+                
                 events.forEach(event => {
                     if (event && event.room === roomName && event.booking_date === currentDateString) {
                         const eventStart = timeToMinutes(event.start);
-                        const eventEnd = timeToMinutes(event.end);
+                        const eventEnd = timeToMinutes(event.end) + 30;
                         const slotTime = timeToMinutes(slot);
-
+        
                         if (slotTime >= eventStart && slotTime < eventEnd) {
                             if (slotTime === eventStart && !spannedCells[`${event.room}-${eventStart}`]) {
                                 const rowSpan = Math.ceil((eventEnd - eventStart) / 30);
-
+        
                                 cell = `<td rowspan="${rowSpan}" class="event ${event.cssClass || ''}" onclick="showEventDetails(${parseInt(event.id)}, '${event.name}', '${event.role}')">${event.title || ''}</td>`;
                                 
                                 spannedCells[`${event.room}-${eventStart}`] = true;
@@ -139,13 +135,15 @@ function updateTable(events) {
                         }
                     }
                 });
-
+        
                 row += cell;
             });
-
+        
             row += "</tr>";
             tableBody.insertAdjacentHTML("beforeend", row);
         });
+        
+        
     } else if (selectedView === "week") {
         headerRow.insertAdjacentHTML("beforeend", "<th>Room</th>");
         const weekDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
@@ -229,3 +227,21 @@ window.addEventListener('click', function (event) {
         modal.style.display = 'none';
     }
 });
+
+function openPopup(room, time) {
+    const popup = document.getElementById('popup');
+    const roomInput = document.getElementById('ruangan');
+    const timeInput = document.getElementById('starttime');
+    const dateInput = document.getElementById('bookingdate');
+
+    const currentDateInput = document.getElementById('current-date-input');
+    const currentDate = currentDateInput ? currentDateInput.value : new Date().toISOString().split('T')[0];
+
+    if (roomInput) roomInput.value = room;
+    if (timeInput) timeInput.value = time;
+    if (dateInput) dateInput.value = currentDate;
+
+    popup.classList.remove('hidden');
+}
+
+

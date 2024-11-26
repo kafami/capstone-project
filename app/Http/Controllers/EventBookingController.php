@@ -88,16 +88,35 @@ class EventBookingController extends Controller
         }
 
 
-    public function showDashboard()
-    {
-        // Fetch only events with pending status
-        $events = EventBooking::where('status', 'pending')->with('user')->get();
+        public function showDashboard()
+        {
+            $events = EventBooking::where('status', 'pending')->with('user')->get();
 
-        return view('dashboardkonfirmasi', [
-            'title' => 'Dashboard Konfirmasi',
-            'events' => $events,
-        ]);
-    }
+            foreach ($events as $event) {
+                $conflicts = EventBooking::where('room', $event->room) // Same room
+                    ->where('booking_date', $event->booking_date) // Same date
+                    ->where('id', '!=', $event->id) // Exclude the current event
+                    ->where(function ($query) use ($event) {
+                        $query->whereBetween('start_time', [$event->start_time, $event->end_time])
+                            ->orWhereBetween('end_time', [$event->start_time, $event->end_time])
+                            ->orWhere(function ($query) use ($event) {
+                                $query->where('start_time', '<=', $event->start_time)
+                                    ->where('end_time', '>=', $event->end_time);
+                            });
+                    })
+                    ->exists();
+
+                $event->is_conflict = $conflicts; // Add a flag for conflicting events
+            }
+
+            return view('dashboardkonfirmasi', [
+                'title' => 'Dashboard Konfirmasi',
+                'events' => $events,
+            ]);
+        }
+
+
+        
     
     public function bulkUpdate(Request $request)
     {

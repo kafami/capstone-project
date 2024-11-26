@@ -141,3 +141,12 @@ body {
     border-width: 0 3px 3px 0;
     transform: rotate(45deg);
 }
+
+.conflict {
+    background-color: #ffcccc;
+    border: 2px solid red; 
+}
+
+.conflict .confirm-box {
+    cursor: not-allowed;
+}
