@@ -108,6 +108,7 @@ Route::delete('/rooms/{room}', [RoomController::class, 'destroy'])->name('rooms.
 
 Route::get('/accepted-events', [EventBookingController::class, 'showAcceptedEventsForToday'])->name('accepted.events');
 Route::delete('/delete-booking/{id}', [EventBookingController::class, 'deleteBooking'])->name('delete.booking');
+Route::patch('/update-status/{id}', [EventBookingController::class, 'updateStatus'])->name('update.status');
 
 
 Route::middleware(['auth'])->group(function () {

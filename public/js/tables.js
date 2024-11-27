@@ -114,12 +114,12 @@ function updateTable(events) {
             let row = `<tr><td>${slot}</td>`;
             
             roomNames.forEach(roomName => {
-                let cell = `<td onclick="openPopup('${roomName}', '${slot}')"></td>`; 
+                let cell = `<td onclick="openPopup('${roomName}', '${slot}')"></td>`; // Call openPopup with room and time
                 
                 events.forEach(event => {
                     if (event && event.room === roomName && event.booking_date === currentDateString) {
                         const eventStart = timeToMinutes(event.start);
-                        const eventEnd = timeToMinutes(event.end) + 30;
+                        const eventEnd = timeToMinutes(event.end) + 30; // Adjust eventEnd to include the final slot
                         const slotTime = timeToMinutes(slot);
         
                         if (slotTime >= eventStart && slotTime < eventEnd) {
@@ -228,20 +228,32 @@ window.addEventListener('click', function (event) {
     }
 });
 
-function openPopup(room, time) {
+function openPopup(room, time, currentDate) {
     const popup = document.getElementById('popup');
     const roomInput = document.getElementById('ruangan');
     const timeInput = document.getElementById('starttime');
     const dateInput = document.getElementById('bookingdate');
 
-    const currentDateInput = document.getElementById('current-date-input');
-    const currentDate = currentDateInput ? currentDateInput.value : new Date().toISOString().split('T')[0];
+    // If no currentDate is provided, use today's date as a fallback
+    if (!currentDate) {
+        console.warn("currentDate is not provided. Using today's date as fallback.");
+        const today = new Date();
+        currentDate = today.toISOString().split('T')[0]; // yyyy-mm-dd format
+    }
 
+    // Log for debugging
+    console.log("Room:", room);
+    console.log("Time:", time);
+    console.log("Current Date (used):", currentDate);
+
+    // Set the input values
     if (roomInput) roomInput.value = room;
     if (timeInput) timeInput.value = time;
-    if (dateInput) dateInput.value = currentDate;
+    if (dateInput) {
+        dateInput.value = currentDate; // Use yyyy-mm-dd format for date input
+        console.log("Booking Date Input Value:", dateInput.value);
+    }
 
+    // Show the popup
     popup.classList.remove('hidden');
 }
-
-

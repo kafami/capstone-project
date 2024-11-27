@@ -1,0 +1,98 @@
+:root {
+    --primaryColor: #013991;
+    --textColor: #ffffff;
+    --bgColor: #f0f0f0;
+    --tableBg: #ffffff;
+    --headerBg: var(--primaryColor);
+    --headerText: var(--textColor);
+    --rowHover: #f9f9f9;
+    --successColor: #28a745;
+    --dangerColor: #dc3545;
+    --warningColor: #ffc107;
+    --shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    display: grid;
+    grid-template-areas: 
+        "nav main";
+    grid-template-columns: 15% 1fr;
+    min-height: 100vh;
+    margin: 0;
+    background-color: var(--bgColor);
+}
+
+.nav {
+    grid-area: nav;
+    background-color: var(--primaryColor);
+}
+
+.dash-main {
+    grid-area: main;
+    padding: 20px;
+}
+
+.title {
+    font-size: 1.8em;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.table-container {
+    background-color: var(--tableBg);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    padding: 20px;
+}
+
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.custom-table thead {
+    background-color: var(--headerBg);
+    color: var(--headerText);
+}
+
+.custom-table th, .custom-table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.custom-table tbody tr:hover {
+    background-color: var(--rowHover);
+}
+
+.status-badge {
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 0.9em;
+}
+
+.status-badge.accepted {
+    background-color: var(--successColor);
+}
+
+.status-badge.denied {
+    background-color: var(--dangerColor);
+}
+
+.status-badge.pending {
+    background-color: var(--warningColor);
+}
+
+.no-bookings {
+    text-align: center;
+    color: #888;
+    font-style: italic;
+}

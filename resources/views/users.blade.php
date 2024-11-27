@@ -13,79 +13,66 @@
         @include('partials.dashboardnavbar')
     </div>
     <div class="dash-main">
-        <div class="main">
-            <div class="header">
-                <p class="body-title">User Information</p>
-            </div>
-            <div id="user-container"></div>
-            <div class="form-container">
-                <h2>Add New User</h2>
-                <form id="user-form">
+        <h1 class="header-title">User Management</h1>
+
+        <!-- User Table -->
+        <div class="table-container">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Role</th>
+                        <th>Name</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($users as $index => $user)
+                        <tr>
+                            <td>{{ $index + 1 }}</td>
+                            <td>{{ ucfirst($user['role']) }}</td>
+                            <td>{{ $user['name'] }}</td>
+                            <td>
+                                <button class="btn delete-btn" onclick="deleteUser({{ $index }})">Delete</button>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="4" class="empty-row">No users found.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Add User Form -->
+        <div class="form-container">
+            <h2 class="form-title">Add New User</h2>
+            <form id="user-form">
+                <div class="form-group">
                     <label for="role">Role:</label>
                     <select id="role" name="role" required>
                         <option value="Admin">Admin</option>
                         <option value="Professor">Professor</option>
                         <option value="Student">Student</option>
                     </select>
+                </div>
+                <div class="form-group">
                     <label for="name">Name:</label>
                     <input type="text" id="name" name="name" required>
-                    <button type="submit">Add User</button>
-                </form>
-            </div>
+                </div>
+                <button type="submit" class="btn primary-btn">Add User</button>
+            </form>
         </div>
     </div>
 
     <script>
         const users = @json($users);
 
-        const roleImages = {
-            'admin': '{{ asset("img/admin.svg") }}',
-            'professor': '{{ asset("img/professor.svg") }}',
-            'student': '{{ asset("img/student.svg") }}'
-        };
-
-        const userContainer = document.getElementById('user-container');
-
-        function renderUsers() {
-            userContainer.innerHTML = '';
-            users.forEach((user, index) => {
-                const userHolder = document.createElement('div');
-                userHolder.className = 'user-holder';
-
-                const infoDiv = document.createElement('div');
-                infoDiv.className = 'info';
-
-                const img = document.createElement('img');
-                img.src = roleImages[user.role] || '{{ asset("img/default-user.svg") }}';
-                img.alt = user.role;
-
-                const roleP = document.createElement('p');
-                roleP.textContent = user.role;
-
-                infoDiv.appendChild(img);
-                infoDiv.appendChild(roleP);
-
-                const nameP = document.createElement('p');
-                nameP.className = 'name';
-                nameP.textContent = user.name;
-
-                const deleteButton = document.createElement('button');
-                deleteButton.textContent = 'Delete';
-                deleteButton.onclick = () => {
-                    users.splice(index, 1);
-                    renderUsers();
-                };
-
-                userHolder.appendChild(infoDiv);
-                userHolder.appendChild(nameP);
-                userHolder.appendChild(deleteButton);
-
-                userContainer.appendChild(userHolder);
-            });
+        function deleteUser(index) {
+            users.splice(index, 1);
+            renderUsers();
         }
-
-        // Initial render
-        renderUsers();
     </script>
 </body>
 </html>

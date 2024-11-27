@@ -162,5 +162,16 @@ class EventBookingController extends Controller
             'bookings' => $bookings,
         ]);
     }
+
+    public function updateStatus(Request $request, $id)
+    {
+        $event = EventBooking::findOrFail($id); // Find the event by ID
+    
+        // Update the status to the provided one (e.g., 'canceled')
+        $event->status = $request->input('status');
+        $event->save();
+    
+        return redirect()->back()->with('success', 'Event status updated successfully.');
+    }
 }
 

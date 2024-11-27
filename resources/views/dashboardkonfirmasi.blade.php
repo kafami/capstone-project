@@ -12,70 +12,110 @@
     <div class="nav">
         @include('partials.dashboardnavbar')
     </div>
-    <form action="{{ route('events.bulkUpdate') }}" method="POST">
+    <form id="eventForm" action="{{ route('events.bulkUpdate') }}" method="POST">
         @csrf
         <div class="dash-main">
             <div class="main">
                 <div class="option-holder">
-                    <p>Konfirmasi Request</p>
-                    <div>
-                        <label for="ruangan" class="form-label"><p>Sort By: </p></label>
-                        <select name="ruangan" id="ruangan" class="form-select">
+                    <h1 class="page-title">Konfirmasi Request</h1>
+                    <div class="sort-container">
+                        <label for="sort" class="form-label">Sort By:</label>
+                        <select name="sort" id="sort" class="form-select">
+                            <option value="default">Default</option>
                             <option value="date">Date</option>
                             <option value="role">Role</option>
                         </select>
                     </div>
-                    <button type="submit" class="submit-button"><p>Submit</p></button>
+                    <div class="form-actions">
+                        <button type="submit" class="btn primary-btn">Bulk Submit</button>
+                    </div>
                 </div>
 
-                @foreach ($events as $event)
-                    <div class="konfirmasi-ruangan {{ $event->is_conflict ? 'conflict' : '' }}">
-                        <div>
-                            <p class="ruangan">Ruangan {{ $event->room }}</p>
-                            <p class="ruangan">{{ $event->event_name }}</p>
-                            <p class="ruangan">{{ $event->description }}</p>
-                            <p class="peminjam">{{ $event->name }}</p>
-                            <p class="peminjam">{{ $event->role }}</p>
-                            <div class="date-time">
-                                <p class="date">{{ \Carbon\Carbon::parse($event->booking_date)->format('m/d/y') }}</p>
-                                <p class="time">{{ $event->start_time }} - {{ $event->end_time }}</p>
+
+                <div id="events-container">
+                    @foreach ($events as $event)
+                        <div class="event-card {{ $event->is_conflict ? 'conflict' : '' }}">
+                            <div class="event-info">
+                                <p class="room">Room: {{ $event->room }}</p>
+                                <p class="event-name">{{ $event->event_name }}</p>
+                                <p class="event-desc">{{ $event->description }}</p>
+                                <p class="user-info">{{ $event->name }} ({{ $event->role }})</p>
+                                <p class="date-time">{{ \Carbon\Carbon::parse($event->booking_date)->format('m/d/Y') }} | {{ $event->start_time }} - {{ $event->end_time }}</p>
+                            </div>
+                            <div class="checkbox-group">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" name="statuses[{{ $event->id }}]" value="accepted" class="confirm-box" onclick="toggleCheckbox(this)" {{ $event->is_conflict ? 'disabled' : '' }}>
+                                    <span class="checkbox-container"></span>
+                                    Accept
+                                </label>
+                                <label class="checkbox-container">
+                                    <input type="checkbox" name="statuses[{{ $event->id }}]" value="denied" class="deny-box" onclick="toggleCheckbox(this)">
+                                    <span class="checkbox-container"></span>
+                                    Deny
+                                </label>
                             </div>
                         </div>
-                        <label class="container">
-                            <input type="checkbox" name="statuses[{{ $event->id }}]" value="accepted" class="confirm-box" onclick="toggleCheckbox(this)" {{ $event->is_conflict ? 'disabled' : '' }}>
-                            <span class="checkbox-container"></span>
-                        </label>
-                        <label class="container">
-                            <input type="checkbox" name="statuses[{{ $event->id }}]" value="denied" class="deny-box" onclick="toggleCheckbox(this)">
-                            <span class="checkbox-container"></span>
-                        </label>
-                    </div>
-                @endforeach
-
-
+                    @endforeach
+                </div>
             </div>
         </div>
     </form>
 
 <script>
+    // Sorting Logic
+    const events = @json($events);
+
+    document.getElementById('sort').addEventListener('change', function () {
+        const sortValue = this.value;
+        let sortedEvents = [...events];
+
+        if (sortValue === 'date') {
+            sortedEvents.sort((a, b) => new Date(a.booking_date) - new Date(b.booking_date));
+        } else if (sortValue === 'role') {
+            sortedEvents.sort((a, b) => a.role.localeCompare(b.role));
+        }
+
+        renderEvents(sortedEvents);
+    });
+
+    // Ensure only one checkbox per event can be selected
     function toggleCheckbox(selectedCheckbox) {
-        const checkboxes = selectedCheckbox.closest('.konfirmasi-ruangan').querySelectorAll('input[type="checkbox"]');
+        const checkboxes = selectedCheckbox.closest('.event-card').querySelectorAll('input[type="checkbox"]');
         checkboxes.forEach(checkbox => {
             if (checkbox !== selectedCheckbox) checkbox.checked = false;
         });
     }
-    document.querySelector('form').addEventListener('submit', function (e) {
-        const conflictingCheckBoxes = document.querySelectorAll('.konfirmasi-ruangan.conflict .confirm-box:checked');
 
-        console.log("Conflicting checkboxes:", conflictingCheckBoxes);
+    // Re-render events (used for sorting)
+    function renderEvents(sortedEvents) {
+        const container = document.getElementById('events-container');
+        container.innerHTML = '';
 
-        if (conflictingCheckBoxes.length > 0) {
-            alert('You cannot confirm events that have conflicts. Please resolve the conflicts first.');
-            e.preventDefault(); 
-        }
-    });
-
+        sortedEvents.forEach(event => {
+            const card = `
+                <div class="event-card ${event.is_conflict ? 'conflict' : ''}">
+                    <div class="event-info">
+                        <p class="room">Room: ${event.room}</p>
+                        <p class="event-name">${event.event_name}</p>
+                        <p class="event-desc">${event.description}</p>
+                        <p class="user-info">${event.name} (${event.role})</p>
+                        <p class="date-time">${new Date(event.booking_date).toLocaleDateString()} | ${event.start_time} - ${event.end_time}</p>
+                    </div>
+                    <div class="checkbox-group">
+                        <label class="checkbox-container">
+                            <input type="checkbox" name="statuses[${event.id}]" value="accepted" class="confirm-box" ${event.is_conflict ? 'disabled' : ''}>
+                            <span class="checkbox-container"></span> Accept
+                        </label>
+                        <label class="checkbox-container">
+                            <input type="checkbox" name="statuses[${event.id}]" value="denied" class="deny-box">
+                            <span class="checkbox-container"></span> Deny
+                        </label>
+                    </div>
+                </div>
+            `;
+            container.innerHTML += card;
+        });
+    }
 </script>
-
 </body>
 </html>

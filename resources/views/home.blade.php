@@ -111,18 +111,15 @@
         const openPopupLink = document.querySelector('.calendarOpt a');
         const closePopup = document.getElementById('close-popup');
 
-        // Open the popup
         openPopupLink.addEventListener('click', function (e) {
-            e.preventDefault(); // Prevent default link behavior
+            e.preventDefault();
             popup.classList.remove('hidden');
         });
 
-        // Close the popup
         closePopup.addEventListener('click', function () {
             popup.classList.add('hidden');
         });
 
-        // Close the popup when clicking outside of it
         window.addEventListener('click', function (event) {
             if (event.target === popup) {
                 popup.classList.add('hidden');
@@ -151,14 +148,14 @@
                 type: 'POST',
                 data: formData,
                 success: function (response) {
-                    alert(response.message); // Show success message
-                    $('#popup').addClass('hidden'); // Close the modal
-                    $('#event-form')[0].reset(); // Reset the form fields
+                    alert(response.message);
+                    $('#popup').addClass('hidden');
+                    $('#event-form')[0].reset();
                 },
                 error: function (xhr) {
                     if (xhr.status === 422) {
                         const errors = JSON.parse(xhr.responseText);
-                        alert(errors.message); // Show validation error message
+                        alert(errors.message); 
                     } else {
                         alert('An error occurred: ' + xhr.responseText);
                     }
