@@ -7,6 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="shortcut icon" href="{{ asset('img/favicon.png') }}">
     <title>{{ $title }}</title>
+    <!-- SweetAlert CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
 <div class="elements">
@@ -15,24 +17,15 @@
             <form action="{{ route('login') }}" method="POST">
                 @csrf
                 <h1>Login</h1>
-                @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
                 <div class="form-row">
-                    <input type="email" name="email" id="emailInput" class="form-input" placeholder="example@email.com">
+                    <input type="email" name="email" id="emailInput" class="form-input" placeholder="example@email.com" value="{{ old('email') }}">
                     <label for="emailInput" class="form-label">Email</label>
                 </div>
                 <div class="form-row">
                     <input type="password" name="password" id="passwordInput" class="form-input" placeholder="1234password">
                     <label for="passwordInput" class="form-label">Password</label>
                 </div>
-                <a href="#" class="forgotPwd">forgot password</a>
+                <a href="#" class="forgotPwd">Forgot password?</a>
 
                 <button type="submit" class="submitBtn">Login</button>
             </form>
@@ -40,5 +33,20 @@
         </div>
     </div>
 </div>
+
+
+@if(session('error'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            Swal.fire({
+                icon: 'error',
+                title: 'Login Failed',
+                text: '{{ session('error') }}',
+                confirmButtonText: 'Retry'
+            });
+        });
+    </script>
+@endif
+
 </body>
 </html>

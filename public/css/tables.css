@@ -27,14 +27,56 @@
 }
 
 
-
-
 .form-select{
     padding: 8px;
     font-size: 16px;
     border-radius: 5px;
     border: 1px solid #ccc;
 }
+
+#prev, #next {
+    padding: 10px 15px;
+    margin-left: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#prev {
+    background-color: #f2f2f2;
+    color: #333;
+}
+
+#prev:hover {
+    background-color: #ddd;
+}
+
+#next {
+    background-color: #013991;
+    color: white;
+}
+
+#next:hover {
+    background-color: #0056b3;
+}
+
+#prev:hover, #next:hover {
+    transform: scale(1.05);
+}
+
+#prev:active, #next:active {
+    transform: scale(0.95);
+    background-color: #ccc;
+}
+
+.select {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
 
 
 #reservationTable {
@@ -58,7 +100,7 @@
 
 #reservationTable td {
     max-width: 10px;
-    min-height: 30px; /* Adjust as necessary */
+    min-height: 30px;
     vertical-align: top;
     padding: 10px;
     border-bottom: 1px solid #ddd;

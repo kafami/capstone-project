@@ -153,9 +153,11 @@ class EventBookingController extends Controller
 
     public function showUserBookings()
     {
-        // Get the authenticated user's bookings
+        // Get the authenticated user's bookings, sorted by booking_date
         $user = Auth::user();
-        $bookings = EventBooking::where('user_id', $user->id)->get();
+        $bookings = EventBooking::where('user_id', $user->id)
+            ->orderBy('booking_date', 'desc') 
+            ->get();
 
         return view('user_bookings', [
             'title' => 'My Bookings',

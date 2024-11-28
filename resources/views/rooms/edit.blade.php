@@ -23,7 +23,7 @@
             </div>
         @endif
 
-        <form action="{{ route('rooms.update', $room) }}" method="POST" class="edit-room-form">
+        <form action="{{ route('rooms.update', $room) }}" method="POST" class="edit-room-form" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
@@ -40,6 +40,35 @@
             <div class="form-group">
                 <label for="capacity">Capacity (Optional)</label>
                 <input type="number" id="capacity" name="capacity" value="{{ old('capacity', $room->capacity) }}">
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" name="description" rows="5">{{ old('description', $room->description) }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="blueprint">Blueprint</label>
+                @if ($room->blueprint)
+                    <div class="current-file">
+                        <p>Current Blueprint:</p>
+                        <a href="{{ asset('storage/' . $room->blueprint) }}" target="_blank">View Current Blueprint</a>
+                    </div>
+                @endif
+                <input type="file" id="blueprint" name="blueprint" accept=".jpeg,.png,.jpg,.pdf">
+                <small class="form-text">Acceptable formats: JPEG, PNG, JPG, PDF</small>
+            </div>
+
+            <div class="form-group">
+                <label for="image">Room Image</label>
+                @if ($room->image)
+                    <div class="current-file">
+                        <p>Current Image:</p>
+                        <img src="{{ asset('storage/' . $room->image) }}" alt="Room Image" style="max-width: 200px;">
+                    </div>
+                @endif
+                <input type="file" id="image" name="image" accept=".jpeg,.png,.jpg">
+                <small class="form-text">Acceptable formats: JPEG, PNG, JPG</small>
             </div>
 
             <div class="button-group">

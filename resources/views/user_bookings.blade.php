@@ -55,9 +55,23 @@
 
         <!-- Sidebar -->
         <div class="secondary">
-            <div class="search-bar-holder">
-                <input class="search-bar" type="text" placeholder="Search bookings...">
-            </div>
+        <div class="search-bar-holder">
+            <form action="{{ route('rooms.search') }}" method="GET" id="search-form">
+                <input 
+                    class="search-bar" 
+                    type="text" 
+                    name="query" 
+                    id="search-bar" 
+                    placeholder="Search for a room..." 
+                    required>
+            </form>
+            @if (session('error'))
+                <div class="alert alert-danger">
+                    {{ session('error') }}
+                </div>
+            @endif
+        </div>
+
             <!-- Calendar -->
             @include('partials.calendar')
             <!-- Categories -->
@@ -82,5 +96,33 @@
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const table = document.querySelector('.table');
+            const headers = table.querySelectorAll('th');
+            const rows = Array.from(table.querySelector('tbody').rows);
+
+            headers.forEach((header, index) => {
+                header.addEventListener('click', () => {
+                    const sortedRows = rows.sort((a, b) => {
+                        const aData = a.cells[index].innerText;
+                        const bData = b.cells[index].innerText;
+
+                        if (index === 2) { // Assuming the 'Booking Date' is the third column (index 2)
+                            return new Date(aData) - new Date(bData);
+                        }
+                        return aData.localeCompare(bData);
+                    });
+
+                    // Clear and re-append sorted rows
+                    const tbody = table.querySelector('tbody');
+                    tbody.innerHTML = '';
+                    sortedRows.forEach(row => tbody.appendChild(row));
+                });
+            });
+        });
+
+        
+    </script>
 </body>
 </html>

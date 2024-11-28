@@ -101,10 +101,15 @@ Route::get('/api/rooms', function () {
 
 Route::resource('rooms', RoomController::class)->middleware('auth');
 Route::get('/rooms', [RoomController::class, 'index'])->name('rooms.index');
+Route::get('/ruangan', [RoomController::class, 'listRooms'])->name('rooms.list');
+Route::get('/ruangan/{room}', [RoomController::class, 'show'])->name('rooms.show');
 Route::post('/rooms', [RoomController::class, 'store'])->name('rooms.store');
 Route::get('/rooms/{room}/edit', [RoomController::class, 'edit'])->name('rooms.edit');
 Route::put('/rooms/{room}', [RoomController::class, 'update'])->name('rooms.update');
 Route::delete('/rooms/{room}', [RoomController::class, 'destroy'])->name('rooms.destroy');
+Route::get('/search-rooms', [RoomController::class, 'search'])->name('rooms.search');
+
+
 
 Route::get('/accepted-events', [EventBookingController::class, 'showAcceptedEventsForToday'])->name('accepted.events');
 Route::delete('/delete-booking/{id}', [EventBookingController::class, 'deleteBooking'])->name('delete.booking');
@@ -114,3 +119,6 @@ Route::patch('/update-status/{id}', [EventBookingController::class, 'updateStatu
 Route::middleware(['auth'])->group(function () {
     Route::get('/my-bookings', [EventBookingController::class, 'showUserBookings'])->name('user.bookings');
 });
+
+Route::get('/edit-profile', [UserController::class, 'editProfile'])->name('edit-profile');
+Route::post('/update-profile', [UserController::class, 'updateProfile'])->name('update-profile');

@@ -6,8 +6,8 @@
     <header>
       <p class="current-date"></p>
       <div class="icons">
-        <span id="prev" class="material-symbols-rounded">chevron_left</span>
-        <span id="next" class="material-symbols-rounded">chevron_right</span>
+        <span id="prevcal" class="material-symbols-rounded">chevron_left</span>
+        <span id="nextcal" class="material-symbols-rounded">chevron_right</span>
       </div>
     </header>
     <div class="calendar">

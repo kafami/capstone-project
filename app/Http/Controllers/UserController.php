@@ -23,27 +23,46 @@
                 'users' => $users,
             ]);
         }
-        
-        public function updateProfileImage(Request $request)
-        {
-            $request->validate([
-                'profile_image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Validate image file
-            ]);
 
+        public function editProfile()
+        {
+            $user = auth()->user(); // Get the authenticated user
+            return view('edit_profile', [
+                'title' => 'Edit Profile',
+                'user' => $user
+            ]);
+        }
+        
+        public function updateProfile(Request $request)
+        {
             $user = auth()->user();
 
-            // Delete old profile image if it exists
-            if ($user->profile_image && \Storage::exists('public/' . $user->profile_image)) {
-                \Storage::delete('public/' . $user->profile_image);
+            // Validate input data
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+                'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            ]);
+
+            // Handle profile image upload
+            if ($request->hasFile('profile_image')) {
+                // Delete old profile image if it exists
+                if ($user->profile_image && \Storage::exists('public/' . $user->profile_image)) {
+                    \Storage::delete('public/' . $user->profile_image);
+                }
+
+                // Store the new profile image
+                $path = $request->file('profile_image')->store('profile_images', 'public');
+
+                // Update profile image path
+                $user->profile_image = $path;
             }
 
-            // Store the new profile image
-            $path = $request->file('profile_image')->store('profile_images', 'public');
+            // Update user details
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->save();
 
-            // Update the user's profile image path
-            $user->update(['profile_image' => $path]);
-
-            return back()->with('success', 'Profile image updated successfully!');
+            return redirect()->route('edit-profile')->with('success', 'Profile updated successfully!');
         }
-
     }

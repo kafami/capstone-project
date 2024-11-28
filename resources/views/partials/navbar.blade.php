@@ -14,7 +14,7 @@
     <div class="navbarMenu">
         <div class="navbarMenuOpt">
             <img class="navbar-icon-image" src="{{ asset('img/iconsRoomInformation.svg') }}" alt="">
-            <a class="navbar-icon" href="/home"><p>Room Information</p></a>
+            <a class="navbar-icon" href="/home"><p>Event Information</p></a>
         </div>
 
         <span class="fa-stack">
@@ -28,23 +28,30 @@
 
         <div class="navbarMenuOpt">
             <img class="navbar-icon-image" src="{{ asset('img/status.svg') }}" alt="">
-            <a class="navbar-icon" href="/my-bookings"><p>Status Ruangan</p></a>
+            <a class="navbar-icon" href="/my-bookings"><p>Bookings Saya</p></a>
+        </div>
+
+        <div class="navbarMenuOpt">
+            <img class="navbar-icon-image" src="{{ asset('img/status.svg') }}" alt="">
+            <a href="/ruangan">View All Rooms</a>
+
+            
         </div>
 
     </div>
     <div class="profile-dropdown">
-    <img class="profile-img" 
-         src="{{ auth()->user() && auth()->user()->profile_image ? asset('storage/' . auth()->user()->profile_image) : asset('img/blank-profile.jpg') }}" 
-         alt="Profile Image">
-    <div class="profile-dropdown-content">
-        <a href="#">Edit Profile</a>
-        <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
-        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-            @csrf
-        </form>
-
+        <img class="profile-img" 
+            src="{{ auth()->user() && auth()->user()->profile_image ? asset('storage/' . auth()->user()->profile_image) : asset('img/blank-profile.jpg') }}" 
+            alt="Profile Image">
+        <div class="profile-dropdown-content">
+            <a href="/edit-profile">Edit Profile</a>
+            <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                @csrf
+            </form>
+        </div>
     </div>
-</div>
+
 
 </div>
 

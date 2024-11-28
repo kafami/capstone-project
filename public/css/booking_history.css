@@ -9,6 +9,7 @@
     --successColor: #28a745;
     --dangerColor: #dc3545;
     --warningColor: #ffc107;
+    --pendingColor: #808080;
     --shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -87,8 +88,12 @@ body {
     background-color: var(--dangerColor);
 }
 
-.status-badge.pending {
+.status-badge.canceled {
     background-color: var(--warningColor);
+}
+
+.status-badge.pending {
+    background-color: var(--pendingColor);
 }
 
 .no-bookings {

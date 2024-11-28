@@ -42,7 +42,7 @@ updateTable(eventsData);
 
 prevNextIcon.forEach(icon => {
     icon.addEventListener("click", () => {
-        if (icon.id === "prev") {
+        if (icon.id === "prevcal") {
             currMonth--;
             if (currMonth < 0) {
                 currYear--;

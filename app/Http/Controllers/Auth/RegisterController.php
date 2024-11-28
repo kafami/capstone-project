@@ -32,7 +32,7 @@ class RegisterController extends Controller
         $user->name = $request->input('name');
         $user->email = $request->input('email');
         $user->password = Hash::make($request->input('password'));
-        $user->role = 'student'; // Set the role to 'student' for students
+        $user->role = 'student'; 
         $user->save();
 
         Auth::login($user);
@@ -47,14 +47,14 @@ class RegisterController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
             'password_confirmation' => 'required',
-            'role' => 'required|string|in:professor,admin', // Validate professor role
+            'role' => 'required|string|in:professor,admin',
         ]);
 
         $user = new \App\Models\User();
         $user->name = $request->input('name');
         $user->email = $request->input('email');
         $user->password = Hash::make($request->input('password'));
-        $user->role = $request->input('role'); // Use the selected role for professors
+        $user->role = $request->input('role');
         $user->save();
 
         Auth::login($user);

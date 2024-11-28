@@ -110,11 +110,12 @@ function updateTable(events) {
 
         let spannedCells = {};
 
-        slots.forEach((slot, slotIndex) => {
+        slots.forEach((slot) => {
             let row = `<tr><td>${slot}</td>`;
             
             roomNames.forEach(roomName => {
-                let cell = `<td onclick="openPopup('${roomName}', '${slot}')"></td>`; // Call openPopup with room and time
+                // Pass currentDateString to openPopup
+                let cell = `<td onclick="openPopup('${roomName}', '${slot}', '${currentDateString}')"></td>`;
                 
                 events.forEach(event => {
                     if (event && event.room === roomName && event.booking_date === currentDateString) {
@@ -142,6 +143,7 @@ function updateTable(events) {
             row += "</tr>";
             tableBody.insertAdjacentHTML("beforeend", row);
         });
+        
         
         
     } else if (selectedView === "week") {
@@ -234,26 +236,17 @@ function openPopup(room, time, currentDate) {
     const timeInput = document.getElementById('starttime');
     const dateInput = document.getElementById('bookingdate');
 
-    // If no currentDate is provided, use today's date as a fallback
-    if (!currentDate) {
-        console.warn("currentDate is not provided. Using today's date as fallback.");
-        const today = new Date();
-        currentDate = today.toISOString().split('T')[0]; // yyyy-mm-dd format
-    }
-
-    // Log for debugging
+    // Use the passed currentDate without any fallback or overwrite
     console.log("Room:", room);
     console.log("Time:", time);
-    console.log("Current Date (used):", currentDate);
+    console.log("Current Date (passed):", currentDate);
 
     // Set the input values
     if (roomInput) roomInput.value = room;
     if (timeInput) timeInput.value = time;
-    if (dateInput) {
-        dateInput.value = currentDate; // Use yyyy-mm-dd format for date input
-        console.log("Booking Date Input Value:", dateInput.value);
-    }
+    if (dateInput) dateInput.value = currentDate; // Directly use currentDate
 
     // Show the popup
     popup.classList.remove('hidden');
 }
+

@@ -37,7 +37,6 @@
                         <th>Name</th>
                         <th>Location</th>
                         <th>Capacity</th>
-                        <th>Created At</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -48,7 +47,6 @@
                             <td>{{ $room->name }}</td>
                             <td>{{ $room->location ?? 'N/A' }}</td>
                             <td>{{ $room->capacity ?? 'N/A' }}</td>
-                            <td>{{ $room->created_at->format('Y-m-d H:i') }}</td>
                             <td>
                                 <a href="{{ route('rooms.edit', $room) }}" class="btn edit-btn">Edit</a>
                                 <form action="{{ route('rooms.destroy', $room) }}" method="POST" class="inline-form">

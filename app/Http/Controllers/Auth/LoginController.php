@@ -21,12 +21,11 @@ class LoginController extends Controller
         ]);
 
         if (Auth::attempt($request->only('email', 'password'))) {
-            return redirect()->intended('/home'); // Redirect to intended page
+            return redirect()->intended('/home');
         }
 
-        return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ]);
+        return back()->with('error', 'The provided credentials do not match our records.');
+
     }
 
     public function logout()
