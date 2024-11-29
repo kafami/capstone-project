@@ -11,7 +11,7 @@
 <body>
 <div class="elements">
     <div class="body-replace">
-        <div class="register-container">
+        <div class="login-container">
             <form action="{{ route('register.student') }}" method="POST">
                 @csrf
                 <h1>Register</h1>
@@ -25,11 +25,11 @@
                     </div>
                 @endif
                 <div class="form-row">
-                    <input type="text" name="name" id="nameInput" class="form-input" placeholder="Your Name">
+                    <input type="text" name="name" id="nameInput" class="form-input" placeholder="Your Name" value="{{ old('name') }}">
                     <label for="nameInput" class="form-label">Name</label>
                 </div>
                 <div class="form-row">
-                    <input type="email" name="email" id="emailInput" class="form-input" placeholder="example@email.com">
+                    <input type="email" name="email" id="emailInput" class="form-input" placeholder="example@email.com" value="{{ old('email') }}">
                     <label for="emailInput" class="form-label">Email</label>
                 </div>
                 <div class="form-row">
@@ -43,7 +43,7 @@
 
                 <button type="submit" class="submitBtn">Register</button>
             </form>
-            <p class="loginText">Already have an account? <a href="{{ route('login') }}">Login</a></p>
+            <p class="signUpText">Already have an account? <a href="{{ route('login') }}">Login</a></p>
         </div>
     </div>
 </div>
