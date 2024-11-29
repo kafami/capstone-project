@@ -1,47 +1,42 @@
-.select{
+/* Styling for the Select Container */
+.select {
     display: flex;
+    align-items: center; /* Vertically center the items */
+    gap: 15px; /* Space between elements */
+    flex-wrap: wrap; /* Ensure items wrap on smaller screens */
 }
 
-.detail-holder {
-    display: flex;
-    align-items: center; 
-    justify-content: space-between; 
-    width: 100%;
-    margin-bottom: 5px;
-}
-
-.today-date {
-    text-align: left;
-    font-size: 2em;
+.select label {
+    margin: 0; /* Remove default margin for labels */
+    display: inline-block;
 }
 
 .select p {
-    display: inline; 
-    margin-right: 5px;
-    font-family: Arial, sans-serif; 
+    margin: 0; /* Remove unnecessary margins */
+    font-family: Arial, sans-serif;
+    font-size: 1em;
+    display: inline; /* Ensure text is inline */
 }
 
 .form-select {
-    font-family: Arial, sans-serif;
-    font-size: 1em;
-}
-
-
-.form-select{
+    min-width: 150px; /* Ensure consistent dropdown width */
     padding: 8px;
     font-size: 16px;
     border-radius: 5px;
     border: 1px solid #ccc;
+    font-family: Arial, sans-serif;
 }
 
-#prev, #next {
-    padding: 10px 15px;
+/* Button Styling */
+#prev,
+#next {
     margin-left: 10px;
+    padding: 8px 12px;
     font-size: 16px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    transition: all 0.3s ease-in-out;
 }
 
 #prev {
@@ -62,32 +57,30 @@
     background-color: #0056b3;
 }
 
-#prev:hover, #next:hover {
-    transform: scale(1.05);
-}
-
-#prev:active, #next:active {
-    transform: scale(0.95);
-    background-color: #ccc;
-}
-
-.select {
+/* Detail Holder Styling */
+.detail-holder {
     display: flex;
     align-items: center;
-    gap: 10px;
+    justify-content: space-between; /* Space between date and controls */
+    width: 100%;
+    margin-bottom: 10px;
 }
 
+.today-date {
+    text-align: left;
+    font-size: 2em;
+    font-family: Arial, sans-serif;
+}
 
-
+/* Table Styling */
 #reservationTable {
     width: 100%;
-    border-collapse: separate;
+    border-collapse: collapse; /* Remove default spacing */
     border-spacing: 0;
     border: 1px solid #ddd;
     border-radius: 10px;
     overflow: hidden;
 }
-
 
 #reservationTable th {
     background-color: #f2f2f2;
@@ -96,7 +89,6 @@
     text-align: left;
     border-bottom: 1px solid #ddd;
 }
-
 
 #reservationTable td {
     max-width: 10px;
@@ -108,25 +100,23 @@
 }
 
 #reservationTable tr:last-child td {
-    border-bottom: none; 
+    border-bottom: none;
 }
-
 
 #reservationTable tr td:last-child {
     border-right: none;
 }
 
-
+/* Event Styling */
 .event {
     border-radius: 8px;
-    background-color: #b2e4e2; /* Adjust as necessary */
+    background-color: #b2e4e2; /* Default event color */
     padding: 5px;
     text-align: center;
     vertical-align: middle;
     align-items: center;
     color: #fff;
 }
-
 
 .event-meeting-a {
     background-color: #FFCCCC;
@@ -164,6 +154,7 @@
     background-color: #FF6347;
 }
 
+/* Modal Styling */
 .modal {
     display: none; /* Hidden by default */
     position: fixed;
@@ -198,4 +189,16 @@
     color: black;
     text-decoration: none;
     cursor: pointer;
+}
+
+/* Transitions for buttons */
+#prev:hover,
+#next:hover {
+    transform: scale(1.05);
+}
+
+#prev:active,
+#next:active {
+    transform: scale(0.95);
+    background-color: #ccc;
 }

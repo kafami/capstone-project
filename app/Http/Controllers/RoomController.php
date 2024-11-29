@@ -117,5 +117,15 @@ class RoomController extends Controller
         return redirect()->back()->with('error', 'Room not found.');
     }
 
+    public function getRoomDetails($name)
+    {
+        $room = Room::where('name', $name)->first();
+
+        if (!$room) {
+            return response()->json(['message' => 'Room not found'], 404);
+        }
+
+        return response()->json($room);
+    }
 
 }

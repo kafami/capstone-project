@@ -1,5 +1,27 @@
 let eventsData = [];
 
+function initializeListeners() {
+    document.getElementById("location").addEventListener("change", function () {
+        updateTable(eventsData); // Re-render table on location change
+    });
+
+    document.getElementById("view").addEventListener("change", function () {
+        updateTable(eventsData); // Re-render table on view change
+    });
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    fetchRooms().then(() => {
+        fetchEvents().then(events => {
+            eventsData = events;
+            updateTable(eventsData);
+        });
+    });
+
+    initializeListeners(); // Set up listeners
+});
+
+
 function fetchEvents() {
     return fetch('/api/events')
         .then(response => {
@@ -28,21 +50,25 @@ fetchEvents().then(events => {
     updateTable(eventsData); 
 });
 
+
 document.getElementById("view").addEventListener("change", function() {
     updateTable(eventsData);
 });
 
+let roomData = []; 
 let roomNames = [];
 
 function fetchRooms() {
     return fetch('/api/rooms')
         .then(response => response.json())
         .then(data => {
-            roomNames = data.map(room => room.name);
-            console.log("Fetched Rooms:", roomNames);
+            roomData = data; 
+            roomNames = roomData.map(room => room.name); 
+            console.log("Fetched Rooms:", roomData);
         })
         .catch(error => console.error("Error fetching rooms:", error));
 }
+
 
 fetchRooms().then(() => {
     
@@ -55,7 +81,6 @@ fetchRooms().then(() => {
 function updateTable(events) {
     console.log("updateTable function called");
     const currentDateInput = document.getElementById('current-date-input');
-    console.log("Current date input value:", currentDateInput.value);
     let currentDate = new Date(currentDateInput.value);
     currentDate.setDate(currentDate.getDate() + 1); 
     currentDate.setHours(0, 0, 0, 0);
@@ -67,6 +92,20 @@ function updateTable(events) {
     }
 
     events = events.filter(event => event.status === 'accepted');
+
+    const locationDropdown = document.getElementById("location");
+    const selectedLocation = locationDropdown ? locationDropdown.value : "all";
+
+    // Filter room names by selected location
+    if (selectedLocation === "all") {
+        roomNames = roomData.map(room => room.name); // Show all rooms
+    } else {
+        roomNames = roomData
+            .filter(room => room.location == selectedLocation)
+            .map(room => room.name);
+    }
+
+    console.log("Filtered Rooms:", roomNames);
 
     var viewDropdown = document.getElementById("view");
     var selectedView = viewDropdown ? viewDropdown.value : "day";
@@ -105,93 +144,40 @@ function updateTable(events) {
             headerRow.insertAdjacentHTML("beforeend", `<th>${roomName}</th>`);
         });
 
-        var slots = createTimeSlots();
+        const slots = createTimeSlots();
 
-
-        let spannedCells = {};
-
-        slots.forEach((slot) => {
+        slots.forEach(slot => {
             let row = `<tr><td>${slot}</td>`;
-            
+
             roomNames.forEach(roomName => {
-                // Pass currentDateString to openPopup
                 let cell = `<td onclick="openPopup('${roomName}', '${slot}', '${currentDateString}')"></td>`;
-                
+
                 events.forEach(event => {
                     if (event && event.room === roomName && event.booking_date === currentDateString) {
                         const eventStart = timeToMinutes(event.start);
-                        const eventEnd = timeToMinutes(event.end) + 30; // Adjust eventEnd to include the final slot
+                        const eventEnd = timeToMinutes(event.end) + 30; 
                         const slotTime = timeToMinutes(slot);
-        
+
                         if (slotTime >= eventStart && slotTime < eventEnd) {
-                            if (slotTime === eventStart && !spannedCells[`${event.room}-${eventStart}`]) {
+                            if (slotTime === eventStart) {
                                 const rowSpan = Math.ceil((eventEnd - eventStart) / 30);
-        
+
                                 cell = `<td rowspan="${rowSpan}" class="event ${event.cssClass || ''}" onclick="showEventDetails(${parseInt(event.id)}, '${event.name}', '${event.role}')">${event.title || ''}</td>`;
-                                
-                                spannedCells[`${event.room}-${eventStart}`] = true;
                             } else {
                                 cell = "";
                             }
                         }
                     }
                 });
-        
+
                 row += cell;
             });
-        
-            row += "</tr>";
-            tableBody.insertAdjacentHTML("beforeend", row);
-        });
-        
-        
-        
-    } else if (selectedView === "week") {
-        headerRow.insertAdjacentHTML("beforeend", "<th>Room</th>");
-        const weekDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-        weekDays.forEach(day => {
-            headerRow.insertAdjacentHTML("beforeend", `<th>${day}</th>`);
-        });
 
-        roomNames.forEach(roomName => {
-            var row = `<tr><td>${roomName}</td>`;
-            weekDays.forEach(day => {
-                let cell = "<td></td>";
-                events.forEach(event => {
-                    if (event && event.room === roomName && new Date(event.booking_date).getDay() === weekDays.indexOf(day) + 1) {
-                        cell = `<td class="event ${event.cssClass || ''}" onclick="showEventDetails(${parseInt(event.id)}, '${event.name}', '${event.role}')">${event.title || ''}</td>`;
-                    }
-                });
-                row += cell;
-            });
-            row += "</tr>";
-            tableBody.insertAdjacentHTML("beforeend", row);
-        });
-    } else if (selectedView === "month") {
-        headerRow.insertAdjacentHTML("beforeend", "<th>Room</th>");
-        const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
-        for (let day = 1; day <= daysInMonth; day++) {
-            headerRow.insertAdjacentHTML("beforeend", `<th>${day}</th>`);
-        }
-
-        roomNames.forEach(roomName => {
-            var row = `<tr><td>${roomName}</td>`;
-            for (let day = 1; day <= daysInMonth; day++) {
-                let cell = "<td></td>";
-                events.forEach(event => {
-                    const eventDate = new Date(event.booking_date);
-                    if (event && event.room === roomName && eventDate.getDate() === day && eventDate.getMonth() === currentDate.getMonth()) {
-                        cell = `<td class="event ${event.cssClass || ''}" onclick="showEventDetails(${parseInt(event.id)}, '${event.name}', '${event.role}')">${event.title || ''}</td>`;
-                    }
-                });
-                row += cell;
-            }
             row += "</tr>";
             tableBody.insertAdjacentHTML("beforeend", row);
         });
     }
 }
-
 
 
 function showEventDetails(eventId, name, role) {
@@ -249,4 +235,3 @@ function openPopup(room, time, currentDate) {
     // Show the popup
     popup.classList.remove('hidden');
 }
-

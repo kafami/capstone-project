@@ -4,21 +4,33 @@
 <div class="detail-holder">
     <div id="today" class="today-date"></div>
     <div class="select">
-        <form>
+        <div>
             <label for="view">
-                <p>Select View: </p>
+                <p>Select View:</p>
             </label>
             <select class="form-select" id="view" onchange="updateTable()">
                 <option value="day" selected>Day</option>
                 <option value="week">Week</option>
                 <option value="month">Month</option>
             </select>
-        </form>
+        </div>
+        <div>
+            <label for="location">
+                <p>Select Location:</p>
+            </label>
+            <select class="form-select" id="location" onchange="updateTable()">
+                <option value="all" selected>All Locations</option>
+                <option value="1">Location 1</option>
+                <option value="2">Location 2</option>
+            </select>
+        </div>
         <button id="prev" onclick="prevDate()">Prev</button>
         <button id="next" onclick="nextDate()">Next</button>
     </div>
+
     <input type="hidden" id="current-date-input" value="" />
 </div>
+
 
 <table id="reservationTable">
     <thead>

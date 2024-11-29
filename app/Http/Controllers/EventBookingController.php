@@ -12,7 +12,7 @@ class EventBookingController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'room' => 'required|string',
+            'room' => 'required|string|exists:rooms,name', // Validate room exists
             'booking_date' => 'required|date',
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',
@@ -22,22 +22,29 @@ class EventBookingController extends Controller
             'status' => 'required|string',
         ]);
 
+        // Check for conflicts
         $isConflict = EventBooking::where('room', $request->room)
-        ->where('booking_date', $request->booking_date)
-        ->where('status', 'accepted')
-        ->where(function ($query) use ($request) {
-            $query->whereBetween('start_time', [$request->start_time, $request->end_time])
-                ->orWhereBetween('end_time', [$request->start_time, $request->end_time])
-                ->orWhere(function ($query) use ($request) {
-                    $query->where('start_time', '<=', $request->start_time)
-                        ->where('end_time', '>=', $request->end_time);
-                });
-        })
-        ->exists();
+            ->where('booking_date', $request->booking_date)
+            ->where('status', 'accepted')
+            ->where(function ($query) use ($request) {
+                $query->whereBetween('start_time', [$request->start_time, $request->end_time])
+                    ->orWhereBetween('end_time', [$request->start_time, $request->end_time])
+                    ->orWhere(function ($query) use ($request) {
+                        $query->where('start_time', '<=', $request->start_time)
+                            ->where('end_time', '>=', $request->end_time);
+                    });
+            })
+            ->exists();
 
-    if ($isConflict) {
-        return response()->json(['message' => 'The room is already booked for the selected date and time.'], 422);
-    }
+        if ($isConflict) {
+            return response()->json(['message' => 'The room is already booked for the selected date and time.'], 422);
+        }
+
+        // Fetch the location of the room
+        $room = \App\Models\Room::where('name', $request->room)->first();
+        if (!$room) {
+            return response()->json(['message' => 'Room not found.'], 404);
+        }
 
         // Get the authenticated user
         $user = auth()->user();
@@ -55,12 +62,11 @@ class EventBookingController extends Controller
             'user_id' => $user->id, 
             'name' => $user->name, 
             'role' => $user->role, 
+            'location' => $room->location, // Save the location
         ]);
 
         return response()->json(['message' => 'Event booked successfully!'], 201);
     }
-
-    
 
         // Add this method to fetch events
         public function getEvents()
@@ -81,6 +87,7 @@ class EventBookingController extends Controller
                     'role' => $event->role,
                     'user_id' => $event->user_id, 
                     'description' => $event->description,
+                    'location' => $event->location,
                 ];
             });
 

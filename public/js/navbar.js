@@ -1,6 +1,4 @@
 
-//buat profile-picture
-
 
 //buat icon
  $(document).ready(function() {

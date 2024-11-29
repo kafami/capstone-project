@@ -163,6 +163,19 @@
             });
         });
     });
+    document.getElementById('ruangan').addEventListener('change', function () {
+    const roomName = this.value;
+    fetch(`/room-details/${roomName}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.location) {
+                alert('Room location: ' + data.location); // Replace this with your desired behavior
+            } else {
+                console.error('Room not found');
+            }
+        })
+        .catch(error => console.error('Error fetching room details:', error));
+});
 </script>
 
 </body>

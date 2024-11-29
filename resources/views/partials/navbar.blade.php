@@ -32,8 +32,8 @@
         </div>
 
         <div class="navbarMenuOpt">
-            <img class="navbar-icon-image" src="{{ asset('img/status.svg') }}" alt="">
-            <a href="/ruangan">View All Rooms</a>
+            <img class="navbar-icon-image" src="{{ asset('img/classroom2.svg') }}" alt="">
+            <a class="navbar-icon" href="/ruangan">View All Rooms</a>
 
             
         </div>

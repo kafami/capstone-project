@@ -108,6 +108,8 @@ Route::get('/rooms/{room}/edit', [RoomController::class, 'edit'])->name('rooms.e
 Route::put('/rooms/{room}', [RoomController::class, 'update'])->name('rooms.update');
 Route::delete('/rooms/{room}', [RoomController::class, 'destroy'])->name('rooms.destroy');
 Route::get('/search-rooms', [RoomController::class, 'search'])->name('rooms.search');
+Route::get('/room-details/{name}', [RoomController::class, 'getRoomDetails']);
+
 
 
 
@@ -122,3 +124,7 @@ Route::middleware(['auth'])->group(function () {
 
 Route::get('/edit-profile', [UserController::class, 'editProfile'])->name('edit-profile');
 Route::post('/update-profile', [UserController::class, 'updateProfile'])->name('update-profile');
+
+Route::get('/api/rooms', function () {
+    return \App\Models\Room::all(['name', 'location', 'capacity']);
+});
