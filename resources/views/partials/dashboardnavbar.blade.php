@@ -32,7 +32,32 @@
         </div>
         <div class="dashboard-option">
             <img class="dashNavicons" src="{{ asset('img/logout.svg') }}" alt="">
-            <a href="/"><p class="navText">Logout</p></a>
+            <a href="#" class="logout-link" style="text-decoration: none;">
+                <p class="navText">Logout</p>
+            </a>
         </div>
+
+        <script>
+            document.querySelector('.logout-link').addEventListener('click', function (e) {
+                e.preventDefault();
+
+                // Create a hidden form and submit it
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '{{ route('admin.logout') }}';
+
+                const csrfToken = document.createElement('input');
+                csrfToken.type = 'hidden';
+                csrfToken.name = '_token';
+                csrfToken.value = '{{ csrf_token() }}';
+
+                form.appendChild(csrfToken);
+                document.body.appendChild(form);
+
+                form.submit();
+            });
+        </script>
+
+
     </div>
 </div>

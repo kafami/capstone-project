@@ -8,7 +8,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Models\Room;
 use App\Http\Controllers\RoomController;
-
+use App\Http\Controllers\AdminAuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -128,3 +128,8 @@ Route::post('/update-profile', [UserController::class, 'updateProfile'])->name('
 Route::get('/api/rooms', function () {
     return \App\Models\Room::all(['name', 'location', 'capacity']);
 });
+
+Route::get('/admin/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
+Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin.login.post');
+Route::get('/admin/dashboard', [AdminAuthController::class, 'dashboard'])->name('admin.dashboard')->middleware('admin');
+Route::post('/adminlogout', function () {Auth::logout();return redirect('/admin/login');})->name('admin.logout');

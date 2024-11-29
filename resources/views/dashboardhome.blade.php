@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
     <link rel="shortcut icon" href="{{ asset('img/favicon.png') }}">
-    <title>{{ $title }}</title>
+    <title>dashboard</title>
 </head>
 <body>
     <div class="nav">

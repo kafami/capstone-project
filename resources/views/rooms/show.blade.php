@@ -34,7 +34,7 @@
 
                 @if ($room->blueprint)
                     <div class="room-blueprint">
-                        <h3>Room Blueprint</h3>
+                        <h3>Denah Ruangan</h3>
                         @if (pathinfo($room->blueprint, PATHINFO_EXTENSION) === 'pdf')
                             <a href="{{ asset('storage/' . $room->blueprint) }}" target="_blank" class="blueprint-link">View Blueprint (PDF)</a>
                         @else
