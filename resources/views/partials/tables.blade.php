@@ -16,12 +16,12 @@
         </div>
         <div>
             <label for="location">
-                <p>Select Location:</p>
+                <p>Select Lantai:</p>
             </label>
             <select class="form-select" id="location" onchange="updateTable()">
-                <option value="all" selected>All Locations</option>
-                <option value="1">Location 1</option>
-                <option value="2">Location 2</option>
+                <option value="all" selected>Semua Lantai</option>
+                <option value="1">Lantai 1</option>
+                <option value="2">Lantai 2</option>
             </select>
         </div>
         <button id="prev" onclick="prevDate()">Prev</button>

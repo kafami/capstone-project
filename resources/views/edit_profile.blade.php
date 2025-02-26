@@ -30,12 +30,6 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" name="email" id="email" value="{{ old('email', $user->email) }}" required>
-                    @error('email') <small class="error">{{ $message }}</small> @enderror
-                </div>
-
-                <div class="form-group">
                     <label for="profile_image">Profile Image</label>
                     @if ($user->profile_image)
                         <img src="{{ asset('storage/' . $user->profile_image) }}" alt="Profile Image" class="profile-image">

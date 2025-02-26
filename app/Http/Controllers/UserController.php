@@ -65,4 +65,41 @@
 
             return redirect()->route('edit-profile')->with('success', 'Profile updated successfully!');
         }
+
+        public function store(Request $request)
+        {
+            // Validate the input data
+            $request->validate([
+                'role' => 'required|in:Admin,Professor,Student',
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|unique:users,email',
+                'password' => 'required|string|min:6', // Add a default password
+            ]);
+
+            // Create a new user
+            User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => bcrypt($request->password), // Hash the password
+                'role' => $request->role,
+            ]);
+
+            // Redirect back with success message
+            return redirect()->route('users.index')->with('success', 'User added successfully!');
+        }
+
+        public function destroy($id)
+        {
+            $user = User::find($id);
+
+            if ($user) {
+                $user->delete();
+
+                return response()->json(['success' => true, 'message' => 'User deleted successfully!']);
+            }
+
+            return response()->json(['success' => false, 'message' => 'User not found!'], 404);
+        }
+
+
     }

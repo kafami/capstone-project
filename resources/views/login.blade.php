@@ -42,7 +42,7 @@
                 icon: 'error',
                 title: 'Login Failed',
                 text: '{{ session('error') }}',
-                confirmButtonText: 'Retry'
+                confirmButtonText: 'OK'
             });
         });
     </script>

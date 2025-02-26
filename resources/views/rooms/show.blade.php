@@ -18,19 +18,18 @@
         <div class="main">
             <div class="form-container">
                 <h2 class="form-title">{{ $room->name }}</h2>
-                
-                <div class="room-info">
-                    <p><strong>Location:</strong> {{ $room->location }}</p>
-                    <p><strong>Capacity:</strong> {{ $room->capacity }}</p>
-                    <p><strong>Description:</strong> {{ $room->description ?? 'No description available' }}</p>
-                </div>
-
-                @if ($room->image)
-                    <div class="room-image">
-                        <h3>Room Image</h3>
-                        <img src="{{ asset('storage/' . $room->image) }}" alt="Room Image">
+                <div class="room-content">
+                    @if ($room->image)
+                        <div class="room-image">
+                            <img src="{{ asset('storage/' . $room->image) }}" alt="Room Image">
+                        </div>
+                    @endif
+                    <div class="room-info">
+                        <p><strong>Location:</strong> {{ $room->location }}</p>
+                        <p><strong>Capacity:</strong> {{ $room->capacity }}</p>
+                        <p><strong>Description:</strong> {{ $room->description ?? 'No description available' }}</p>
                     </div>
-                @endif
+                </div>
 
                 @if ($room->blueprint)
                     <div class="room-blueprint">

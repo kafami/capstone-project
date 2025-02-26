@@ -6,6 +6,8 @@
     <title>Accepted Upcoming Events</title>
     <link rel="shortcut icon" href="{{ asset('img/favicon.png') }}">
     <link rel="stylesheet" href="{{ asset('css/accepted_events.css') }}">
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 </head>
 <body>
     <div class="nav">
@@ -40,7 +42,8 @@
                                     @csrf
                                     @method('PATCH')
                                     <input type="hidden" name="status" value="canceled">
-                                    <button type="submit" class="action-button cancel">Cancel</button>
+                                    <!-- Use SweetAlert2 for confirmation -->
+                                    <button type="button" class="action-button cancel" onclick="confirmWithSweetAlert(this)">Cancel</button>
                                 </form>
                             </td>
                         </tr>
@@ -53,5 +56,27 @@
             </table>
         </div>
     </div>
+
+    <!-- SweetAlert2 Script -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Function to show SweetAlert2 confirmation
+        function confirmWithSweetAlert(button) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you really want to cancel this event?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, cancel it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Submit the form if confirmed
+                    button.closest('form').submit();
+                }
+            });
+        }
+    </script>
 </body>
 </html>

@@ -176,6 +176,81 @@ function updateTable(events) {
             row += "</tr>";
             tableBody.insertAdjacentHTML("beforeend", row);
         });
+    }else if (selectedView === "week") {
+        // Generate 7 days starting from the current date
+        const days = [];
+        for (let i = 0; i < 7; i++) {
+            const day = new Date(currentDate);
+            day.setDate(day.getDate() + i);
+            days.push(day);
+        }
+    
+        // Create table headers
+        headerRow.insertAdjacentHTML("beforeend", "<th>Room</th>");
+        days.forEach(day => {
+            // Extract the day of the week (e.g., "Mon", "Tue")
+            const dayName = day.toLocaleDateString('en-US', { weekday: 'short' });
+            headerRow.insertAdjacentHTML("beforeend", `<th>${dayName}</th>`);
+        });
+    
+        // Create table body rows
+        roomNames.forEach(roomName => {
+            let row = `<tr><td>${roomName}</td>`;
+            days.forEach(day => {
+                const dayString = day.toISOString().split('T')[0];
+    
+                // Check for events
+                let cell = `<td onclick="openPopup('${roomName}', '', '${dayString}')"></td>`;
+                events.forEach(event => {
+                    if (event && event.room === roomName && event.booking_date === dayString) {
+                        cell = `<td class="event ${event.cssClass || ''}" onclick="showEventDetails(${parseInt(event.id)}, '${event.name}', '${event.role}')">${event.title || ''}</td>`;
+                    }
+                });
+    
+                row += cell;
+            });
+    
+            row += "</tr>";
+            tableBody.insertAdjacentHTML("beforeend", row);
+        });
+    }else if (selectedView === "month") {
+        // Generate all days for the current month
+        const days = [];
+        const year = currentDate.getFullYear();
+        const month = currentDate.getMonth();
+        const totalDays = new Date(year, month + 1, 0).getDate();
+        for (let i = 1; i <= totalDays; i++) {
+            days.push(new Date(year, month, i));
+        }
+    
+        // Create table headers
+        headerRow.insertAdjacentHTML("beforeend", "<th>Room</th>");
+        days.forEach(day => {
+            // Extract only the date (e.g., "01", "02")
+            const dayNumber = day.getDate().toString().padStart(2, '0'); // Add leading zero for single-digit days
+            headerRow.insertAdjacentHTML("beforeend", `<th>${dayNumber}</th>`);
+        });
+    
+        // Create table body rows
+        roomNames.forEach(roomName => {
+            let row = `<tr><td>${roomName}</td>`;
+            days.forEach(day => {
+                const dayString = day.toISOString().split('T')[0];
+    
+                // Check for events
+                let cell = `<td onclick="openPopup('${roomName}', '', '${dayString}')"></td>`;
+                events.forEach(event => {
+                    if (event && event.room === roomName && event.booking_date === dayString) {
+                        cell = `<td class="event ${event.cssClass || ''}" onclick="showEventDetails(${parseInt(event.id)}, '${event.name}', '${event.role}')">${event.title || ''}</td>`;
+                    }
+                });
+    
+                row += cell;
+            });
+    
+            row += "</tr>";
+            tableBody.insertAdjacentHTML("beforeend", row);
+        });
     }
 }
 

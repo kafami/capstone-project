@@ -74,12 +74,18 @@
 
 /* Table Styling */
 #reservationTable {
+    border-collapse: collapse; /* Ensure consistent borders */
+    border: 1px solid #ddd; /* Table border */
     width: 100%;
-    border-collapse: collapse; /* Remove default spacing */
-    border-spacing: 0;
-    border: 1px solid #ddd;
-    border-radius: 10px;
+}
+
+#reservationTable td,
+#reservationTable th {
+    white-space: nowrap;
     overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100px;
+    border-bottom: 1px solid #ddd;
 }
 
 #reservationTable th {
@@ -100,11 +106,11 @@
 }
 
 #reservationTable tr:last-child td {
-    border-bottom: none;
+    border-bottom: 1px solid #ddd; /* Add the missing border */
 }
 
 #reservationTable tr td:last-child {
-    border-right: none;
+    border-right: 1px solid #ddd; /* Add the right border */
 }
 
 /* Event Styling */

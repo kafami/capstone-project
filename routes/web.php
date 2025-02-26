@@ -81,6 +81,11 @@ Route::get('/users', function () {
     ]);
 });
 
+Route::get('/users', [UserController::class, 'index'])->name('users.index');
+Route::post('/users', [UserController::class, 'store'])->name('users.store');
+Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+
 Route::get('/dashboard-register', function () {
     return view('dashboardregister', [
         "title" => "Register Admin"

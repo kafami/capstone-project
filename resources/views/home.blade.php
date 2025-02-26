@@ -56,7 +56,7 @@
             <div class="form-container">
                 <div class="holder">
                     <div class="data-input">
-                        <form id="event-form">
+                    <form id="event-form" method="POST" enctype="multipart/form-data">
                             <!-- Existing form structure -->
                             <div class="form-group">
                                 <label for="ruangan" class="form-label">Pilih ruangan:</label>
@@ -96,87 +96,134 @@
                                 <label for="description" class="form-label">Deskripsi:</label>
                                 <textarea id="description" name="description" class="form-input deskripsi-acara" rows="5"></textarea>
                             </div>
+                            <div class="form-group">
+                                <label for="permit_picture" class="form-label">Upload Surat: *optional</label>
+                                <input type="file" id="permit_picture" name="permit_picture" class="form-input" accept="image/*">
+                            </div>
                             <div class="button-container">
                                 <input type="submit" id="submit-btn" value="Submit">
                             </div>
+                            
+
                         </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const popup = document.getElementById('popup');
-        const openPopupLink = document.querySelector('.calendarOpt a');
-        const closePopup = document.getElementById('close-popup');
+document.addEventListener('DOMContentLoaded', function () {
+    const popup = document.getElementById('popup');
+    const openPopupLink = document.querySelector('.calendarOpt a');
+    const closePopup = document.getElementById('close-popup');
 
-        openPopupLink.addEventListener('click', function (e) {
-            e.preventDefault();
-            popup.classList.remove('hidden');
-        });
+    openPopupLink.addEventListener('click', function (e) {
+        e.preventDefault();
+        popup.classList.remove('hidden');
+    });
 
-        closePopup.addEventListener('click', function () {
+    closePopup.addEventListener('click', function () {
+        popup.classList.add('hidden');
+    });
+
+    window.addEventListener('click', function (event) {
+        if (event.target === popup) {
             popup.classList.add('hidden');
-        });
+        }
+    });
+});
 
-        window.addEventListener('click', function (event) {
-            if (event.target === popup) {
-                popup.classList.add('hidden');
+$(document).ready(function () {
+    $('#submit-btn').click(function (e) {
+        e.preventDefault();
+
+        // Initialize FormData object
+        const formData = new FormData();
+        formData.append('room', $('#ruangan').val());
+        formData.append('booking_date', $('#bookingdate').val());
+        formData.append('start_time', $('#starttime').val());
+        formData.append('end_time', $('#endtime').val());
+        formData.append('event_type', $('#event-type').val());
+        formData.append('event_name', $('.nama-acara').val());
+        formData.append('description', $('.deskripsi-acara').val());
+        formData.append('status', 'pending');
+        formData.append('_token', '{{ csrf_token() }}');
+
+        // Add the permit picture file if present
+        const permitPicture = $('#permit_picture')[0].files[0];
+        if (permitPicture) {
+            formData.append('permit_picture', permitPicture); // Add the file to the formData
+        }
+
+        $.ajax({
+            url: '/event-booking',
+            type: 'POST',
+            data: formData,
+            processData: false, // Prevent jQuery from processing the data
+            contentType: false, // Prevent jQuery from setting Content-Type
+            success: function (response) {
+                Swal.fire({
+                    title: 'Success!',
+                    text: response.message,
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    $('#popup').addClass('hidden');
+                    $('#event-form')[0].reset();
+                });
+            },
+            error: function (xhr) {
+                if (xhr.status === 422) {
+                    const errors = xhr.responseJSON.errors;
+                    const errorMessage = Object.values(errors).join('\n');
+                    Swal.fire({
+                        title: 'Validation Error',
+                        text: errorMessage,
+                        icon: 'warning',
+                        confirmButtonText: 'OK'
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'An error occurred: ' + xhr.responseText,
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                }
             }
         });
     });
+});
 
-    $(document).ready(function () {
-        $('#submit-btn').click(function (e) {
-            e.preventDefault();
-
-            const formData = {
-                room: $('#ruangan').val(),
-                booking_date: $('#bookingdate').val(),
-                start_time: $('#starttime').val(),
-                end_time: $('#endtime').val(),
-                event_type: $('#event-type').val(),
-                event_name: $('.nama-acara').val(),
-                description: $('.deskripsi-acara').val(),
-                status: 'pending',
-                _token: '{{ csrf_token() }}'
-            };
-
-            $.ajax({
-                url: '/event-booking',
-                type: 'POST',
-                data: formData,
-                success: function (response) {
-                    alert(response.message);
-                    $('#popup').addClass('hidden');
-                    $('#event-form')[0].reset();
-                },
-                error: function (xhr) {
-                    if (xhr.status === 422) {
-                        const errors = JSON.parse(xhr.responseText);
-                        alert(errors.message); 
-                    } else {
-                        alert('An error occurred: ' + xhr.responseText);
-                    }
-                }
-            });
-        });
-    });
-    document.getElementById('ruangan').addEventListener('change', function () {
+document.getElementById('ruangan').addEventListener('change', function () {
     const roomName = this.value;
     fetch(`/room-details/${roomName}`)
         .then(response => response.json())
         .then(data => {
             if (data.location) {
-                alert('Room location: ' + data.location); // Replace this with your desired behavior
+                Swal.fire({
+                    title: 'Room Details',
+                    text: 'Room location: ' + data.location,
+                    icon: 'info',
+                    confirmButtonText: 'OK'
+                });
             } else {
                 console.error('Room not found');
             }
         })
-        .catch(error => console.error('Error fetching room details:', error));
+        .catch(error => {
+            Swal.fire({
+                title: 'Error',
+                text: 'Error fetching room details: ' + error,
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        });
 });
 </script>
+
 
 </body>
 </html>

@@ -6,6 +6,7 @@
     <title>Room Management</title>
     <link rel="shortcut icon" href="{{ asset('img/favicon.png') }}">
     <link rel="stylesheet" href="{{ asset('css/room_management.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
     <div class="nav">
@@ -50,10 +51,10 @@
                             <td>{{ $room->capacity ?? 'N/A' }}</td>
                             <td>
                                 <a href="{{ route('rooms.edit', $room) }}" class="btn edit-btn">Edit</a>
-                                <form action="{{ route('rooms.destroy', $room) }}" method="POST" class="inline-form">
+                                <form action="{{ route('rooms.destroy', $room) }}" method="POST" class="inline-form delete-form" data-id="{{ $room->id }}">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn delete-btn" onclick="return confirm('Are you sure you want to delete this room?');">Delete</button>
+                                    <button type="button" class="btn delete-btn" onclick="confirmDelete({{ $room->id }})">Delete</button>
                                 </form>
                             </td>
                         </tr>
@@ -66,5 +67,25 @@
             </table>
         </div>
     </div>
+    <script>
+    function confirmDelete(roomId) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "This action cannot be undone!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Submit the delete form
+                document.querySelector(`form[data-id='${roomId}']`).submit();
+            }
+        });
+    }
+</script>
+
 </body>
 </html>

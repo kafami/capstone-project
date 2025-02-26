@@ -116,6 +116,34 @@ body {
     transition: background-color 0.3s ease;
 }
 
+
+.add-user-btn {
+    background-color: var(--primaryColor);
+    color: var(--textColor);              
+    padding: 12px 20px;                   
+    font-size: 1rem;                      
+    font-weight: bold;                    
+    border: none;                      
+    border-radius: 5px;                   
+    cursor: pointer;                     
+    box-shadow: var(--shadow);            
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin: 15px 0;                       
+}
+
+
+.add-user-btn:hover {
+    background-color: #0056b3;            
+    transform: translateY(-2px);          
+}
+
+
+.add-user-btn:focus {
+    outline: 2px solid #0056b3;       
+    outline-offset: 2px;
+}
+
+
 .primary-btn {
     background-color: var(--primaryButton);
     color: #fff;

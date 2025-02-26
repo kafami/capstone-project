@@ -42,17 +42,22 @@
                                 <p class="user-info">{{ $event->name }} ({{ $event->role }})</p>
                                 <p class="date-time">{{ \Carbon\Carbon::parse($event->booking_date)->format('m/d/Y') }} | {{ $event->start_time }} - {{ $event->end_time }}</p>
                             </div>
-                            <div class="checkbox-group">
-                                <label class="checkbox-container">
-                                    <input type="checkbox" name="statuses[{{ $event->id }}]" value="accepted" class="confirm-box" onclick="toggleCheckbox(this)" {{ $event->is_conflict ? 'disabled' : '' }}>
-                                    <span class="checkbox-container"></span>
-                                    Accept
-                                </label>
-                                <label class="checkbox-container">
-                                    <input type="checkbox" name="statuses[{{ $event->id }}]" value="denied" class="deny-box" onclick="toggleCheckbox(this)">
-                                    <span class="checkbox-container"></span>
-                                    Deny
-                                </label>
+                            <div class="actions">
+                                <div class="checkbox-group">
+                                    <label class="checkbox-container">
+                                        <input type="checkbox" name="statuses[{{ $event->id }}]" value="accepted" class="confirm-box" onclick="toggleCheckbox(this)" {{ $event->is_conflict ? 'disabled' : '' }}>
+                                        <span class="checkbox-container"></span>
+                                        Accept
+                                    </label>
+                                    <label class="checkbox-container">
+                                        <input type="checkbox" name="statuses[{{ $event->id }}]" value="denied" class="deny-box" onclick="toggleCheckbox(this)">
+                                        <span class="checkbox-container"></span>
+                                        Deny
+                                    </label>
+                                </div>
+                                @if ($event->permit_picture)
+                                    <button type="button" class="view-permit-btn" onclick="viewPermit('{{ asset('storage/' . $event->permit_picture) }}')">View Permit</button>
+                                @endif
                             </div>
                         </div>
                     @endforeach
@@ -116,6 +121,26 @@
             container.innerHTML += card;
         });
     }
+
+    function viewPermit(permitUrl) {
+        event.preventDefault(); // Prevent the default button behavior
+        const modalHtml = `
+            <div id="permit-modal" class="modal">
+                <div class="modal-content">
+                    <span class="close-modal" onclick="closeModal()">&times;</span>
+                    <img src="${permitUrl}" alt="Permit Image" class="permit-image">
+                </div>
+            </div>
+        `;
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+        document.getElementById('permit-modal').style.display = 'block';
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('permit-modal');
+        if (modal) modal.remove();
+    }
+
 </script>
 </body>
 </html>

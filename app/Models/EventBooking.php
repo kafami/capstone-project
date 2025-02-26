@@ -22,6 +22,7 @@ class EventBooking extends Model
         'name',
         'role',
         'location',
+        'permit_picture',
     ];
 
     public function user()

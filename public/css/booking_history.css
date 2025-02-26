@@ -101,3 +101,139 @@ body {
     color: #888;
     font-style: italic;
 }
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.5); /* Black background with opacity */
+}
+
+/* Modal content box */
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 40%; /* Adjust width as needed */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+}
+
+/* Close button */
+.close-modal {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-modal:hover,
+.close-modal:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 3%;
+  }
+  
+  .holder {
+    width: 100%;
+    max-width: 500px;
+    /* box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px; */
+    padding: 1.5rem;
+    border-radius: 10px;
+    background-color: #fff;
+  }
+  
+  .data-input {
+    display: grid;
+    gap: 1.5rem;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .date-time {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+  }
+  
+  .time-group {
+    flex: 1;
+  }
+  
+  .form-label {
+    margin-bottom: 5px;
+    font-weight: 500;
+    font-family: 'Montserrat', sans-serif;
+  }
+  
+  .form-select,
+  .form-input {
+    padding: 8px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 2px solid #ccc;
+    outline: none;
+    font-family: 'Montserrat', sans-serif;
+    width: 100%; 
+    box-sizing: border-box; 
+  }
+  
+  .time-input {
+    padding: 8px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 2px solid #ccc;
+    outline: none;
+    width: 23%;
+    box-sizing: border-box;
+  }
+  
+  .nama-acara,
+  .deskripsi-acara {
+    width: 100%;
+  }
+  
+  .deskripsi-acara {
+    resize: none;
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: center;
+  }
+  
+  #submit-btn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: var(--primaryColor);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.4s ease;
+  }
+  
+  #submit-btn:hover {
+    background-color: rgb(114, 114, 235);
+  }

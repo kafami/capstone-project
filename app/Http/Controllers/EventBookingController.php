@@ -12,7 +12,7 @@ class EventBookingController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'room' => 'required|string|exists:rooms,name', // Validate room exists
+            'room' => 'required|string|exists:rooms,name',
             'booking_date' => 'required|date',
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',
@@ -20,6 +20,7 @@ class EventBookingController extends Controller
             'event_name' => 'required|string',
             'description' => 'nullable|string',
             'status' => 'required|string',
+            'permit_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Add validation for the picture
         ]);
 
         // Check for conflicts
@@ -46,6 +47,14 @@ class EventBookingController extends Controller
             return response()->json(['message' => 'Room not found.'], 404);
         }
 
+        if ($request->hasFile('permit_picture')) {
+            $permitPath = $request->file('permit_picture')->store('permits', 'public');
+        }
+         else {
+            \Log::info('No permit file uploaded.');
+        }
+        
+
         // Get the authenticated user
         $user = auth()->user();
 
@@ -62,11 +71,13 @@ class EventBookingController extends Controller
             'user_id' => $user->id, 
             'name' => $user->name, 
             'role' => $user->role, 
-            'location' => $room->location, // Save the location
+            'location' => $room->location,
+            'permit_picture' => $permitPath, // Save the permit picture path
         ]);
 
         return response()->json(['message' => 'Event booked successfully!'], 201);
     }
+
 
         // Add this method to fetch events
         public function getEvents()
@@ -88,6 +99,7 @@ class EventBookingController extends Controller
                     'user_id' => $event->user_id, 
                     'description' => $event->description,
                     'location' => $event->location,
+                    'permit_picture' => $event->permit_path
                 ];
             });
 
