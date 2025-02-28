@@ -23,23 +23,33 @@ class EventBookingController extends Controller
             'permit_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Add validation for the picture
         ]);
 
+        // Handle permit picture upload
+        $permitPath = null;
+        if ($request->hasFile('permit_picture')) {
+            $permitPath = $request->file('permit_picture')->store('permits', 'public');
+        }
+
         // Check for conflicts
         $isConflict = EventBooking::where('room', $request->room)
             ->where('booking_date', $request->booking_date)
-            ->where('status', 'accepted')
+            ->where('status', 'accepted') // Ensure only accepted bookings are considered
             ->where(function ($query) use ($request) {
                 $query->whereBetween('start_time', [$request->start_time, $request->end_time])
                     ->orWhereBetween('end_time', [$request->start_time, $request->end_time])
                     ->orWhere(function ($query) use ($request) {
                         $query->where('start_time', '<=', $request->start_time)
-                            ->where('end_time', '>=', $request->end_time);
+                                ->where('end_time', '>=', $request->end_time);
                     });
             })
             ->exists();
 
-        if ($isConflict) {
-            return response()->json(['message' => 'The room is already booked for the selected date and time.'], 422);
-        }
+
+            if ($isConflict) {
+                return response()->json([
+                    'message' => 'The room is already booked for the selected date and time.'
+                ], 422);
+            }
+            
 
         // Fetch the location of the room
         $room = \App\Models\Room::where('name', $request->room)->first();
@@ -112,7 +122,8 @@ class EventBookingController extends Controller
             $events = EventBooking::where('status', 'pending')->with('user')->get();
 
             foreach ($events as $event) {
-                $conflicts = EventBooking::where('room', $event->room) // Same room
+                $conflicts = EventBooking::where('status', 'pending') // Only compare with pending events
+                    ->where('room', $event->room) // Same room
                     ->where('booking_date', $event->booking_date) // Same date
                     ->where('id', '!=', $event->id) // Exclude the current event
                     ->where(function ($query) use ($event) {
@@ -133,9 +144,6 @@ class EventBookingController extends Controller
                 'events' => $events,
             ]);
         }
-
-
-        
     
     public function bulkUpdate(Request $request)
     {

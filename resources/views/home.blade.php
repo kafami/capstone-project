@@ -175,24 +175,25 @@ $(document).ready(function () {
                 });
             },
             error: function (xhr) {
-                if (xhr.status === 422) {
-                    const errors = xhr.responseJSON.errors;
-                    const errorMessage = Object.values(errors).join('\n');
-                    Swal.fire({
-                        title: 'Validation Error',
-                        text: errorMessage,
-                        icon: 'warning',
-                        confirmButtonText: 'OK'
-                    });
-                } else {
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'An error occurred: ' + xhr.responseText,
-                        icon: 'error',
-                        confirmButtonText: 'OK'
-                    });
-                }
+            if (xhr.status === 422) {
+                let response = xhr.responseJSON;
+                let errorMessage = response.message || 'Validation error occurred';
+                Swal.fire({
+                    title: 'Booking Conflict',
+                    text: errorMessage,
+                    icon: 'warning',
+                    confirmButtonText: 'OK'
+                });
+            } else {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'An error occurred: ' + xhr.responseText,
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
             }
+        }
+
         });
     });
 });
